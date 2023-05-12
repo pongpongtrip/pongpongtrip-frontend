@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # front
 
 ## Project setup
@@ -22,3 +23,6 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+=======
+# pongpongtrip-frontend
+>>>>>>> 19ab2a393dc3731f4c8210126597cbf0afcd8951
