@@ -1,29 +1,63 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import HomeView from '@/views/HomeView.vue';
+import HotPlaceView from '@/views/HotPlaceView.vue';
+import MyPlanView from '@/views/MyPlanView.vue';
+import TripSearchView from '@/views/TripSearchView.vue';
+import TripBoardView from '@/views/TripBoardView.vue';
+import LogInView from '@/views/LogInView.vue';
+import MemberInfoView from '@/views/MemberInfoView.vue';
+import RegistView from '@/views/RegistView.vue';
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
-  {
-    path: '/',
-    name: 'home',
-    component: HomeView
-  },
-  {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  }
-]
+	{
+		path: '/',
+		name: 'home',
+		component: HomeView,
+	},
+	{
+		path: '/hotplace',
+		name: 'hotplace',
+		component: HotPlaceView,
+	},
+	{
+		path: '/myplan',
+		name: 'myplan',
+		component: MyPlanView,
+	},
+	{
+		path: '/tripsearch',
+		name: 'tripsearch',
+		component: TripSearchView,
+	},
+	{
+		path: '/tripboard',
+		name: 'tripboard',
+		component: TripBoardView,
+	},
+	{
+		path: '/login',
+		name: 'login',
+		component: LogInView,
+	},
+	{
+		path: '/memberinfo',
+		name: 'memberinfo',
+		component: MemberInfoView,
+	},
+	{
+		path: '/regist',
+		name: 'regist',
+		component: RegistView,
+	},
+];
 
 const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes
-})
+	mode: 'history',
+	base: process.env.BASE_URL,
+	routes,
+});
 
-export default router
+export default router;
