@@ -35,11 +35,11 @@
 			<!--form  end-->
 
 			<!-- kakao map start -->
-			<KaKaoMap />
+			<KaKaoMap :markerItems="markers"/>
 			<!-- kakao map end -->
 
 			<h2 class="mt-4">관광지 목록</h2>
-			<trip-items></trip-items>
+			<trip-items :trip-items="tripItems"></trip-items>
 		</b-container>
 	</div>
 </template>
@@ -57,6 +57,8 @@ export default {
 	},
 	data() {
 		return {
+			tripItems: [],
+			markers: [],
 			form: {
 				sido_code: 0,
 				content_type_id: 0,
@@ -101,7 +103,26 @@ export default {
 			alert(JSON.stringify(this.form));
 			http
 				.post(`/attraction/search`, JSON.stringify(this.form))
-				.then((response) => { console.log(response.data) });
+				.then((response) => {
+					console.log(response.data);
+
+					// 받아온 데이터를 가공하여 tripItems에 할당
+					this.tripItems = response.data;
+					let marks = [];
+
+					for (let i = 0; i < response.data.length; i++) {
+						let a = response.data[i].latitude;
+						let b = response.data[i].longitude;
+						// console.log(a);
+						// console.log(b);
+						// console.log([a, b]);
+						marks.push([a, b]);
+					}
+					// console.log(marks);
+					this.markers = marks;
+					console.log(this.tripItems);
+					console.log(this.markers);
+				});
 		},
 		onReset(event) {
 			event.preventDefault();
