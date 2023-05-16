@@ -5,9 +5,11 @@ import HotPlaceView from '@/views/HotPlaceView.vue';
 import MyPlanView from '@/views/MyPlanView.vue';
 import TripSearchView from '@/views/TripSearchView.vue';
 import TripBoardView from '@/views/TripBoardView.vue';
-import LogInView from '@/views/LogInView.vue';
-import MemberInfoView from '@/views/MemberInfoView.vue';
-import RegistView from '@/views/RegistView.vue';
+import LogInView from '@/components/member/LogInView.vue';
+import MemberInfoView from '@/components/member/MemberInfoView.vue';
+import RegistView from '@/components/member/RegistView.vue';
+import MemberUpdateView from '@/components/member/MemberUpdateView.vue';
+import MemberList from '@/components/admin/MemberList.vue';
 
 Vue.use(VueRouter);
 
@@ -46,6 +48,16 @@ const routes = [
 		path: '/memberinfo',
 		name: 'memberinfo',
 		component: MemberInfoView,
+	},
+	{
+		path: '/memberupdate',
+		name: 'memberupdate',
+		component: MemberUpdateView,
+	},
+	{
+		path: '/memberlist',
+		name: 'memberlist',
+		component: MemberList,
 	},
 	{
 		path: '/regist',
