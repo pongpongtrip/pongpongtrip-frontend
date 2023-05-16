@@ -58,5 +58,15 @@ export default {
 			],
 		};
 	},
+	methods: {
+		onSubmit: function(){
+			console.log("submit");
+		},
+		onReset: function(){
+			console.log("onReset");
+		}
+
+
+	}
 };
 </script>
