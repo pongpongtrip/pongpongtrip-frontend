@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import http from "@/api/http.js";
 import TripItems from '@/components/TripItems.vue';
 import KaKaoMap from '@/components/KaKaoMap.vue';
 
@@ -63,23 +64,23 @@ export default {
 			},
 			sido_codes: [
 				{ text: '검색 할 지역 선택', value: 0 },
-				{ text: '서울', value: null },
-				{ text: '인천', value: null },
-				{ text: '대전', value: null },
-				{ text: '대구', value: null },
-				{ text: '광주', value: null },
-				{ text: '부산', value: null },
-				{ text: '울산', value: null },
-				{ text: '세종특별자치시', value: null },
-				{ text: '경기도', value: null },
-				{ text: '강원도', value: null },
-				{ text: '충청북도', value: null },
-				{ text: '충청남도', value: null },
-				{ text: '경상북도', value: null },
-				{ text: '경상남도', value: null },
-				{ text: '전라북도', value: null },
-				{ text: '전라남도', value: null },
-				{ text: '제주도', value: null },
+				{ text: '서울', value: 1 },
+				{ text: '인천', value: 2 },
+				{ text: '대전', value: 3 },
+				{ text: '대구', value: 4 },
+				{ text: '광주', value: 5 },
+				{ text: '부산', value: 6 },
+				{ text: '울산', value: 7 },
+				{ text: '세종특별자치시', value: 8 },
+				{ text: '경기도', value: 31 },
+				{ text: '강원도', value: 32 },
+				{ text: '충청북도', value: 33 },
+				{ text: '충청남도', value: 34 },
+				{ text: '경상북도', value: 35 },
+				{ text: '경상남도', value: 36 },
+				{ text: '전라북도', value: 37 },
+				{ text: '전라남도', value: 38 },
+				{ text: '제주도', value: 39 },
 			],
 			content_type_ids: [
 				{ text: '관광지 유형', value: 0 },
@@ -98,6 +99,9 @@ export default {
 		onSubmit(event) {
 			event.preventDefault();
 			alert(JSON.stringify(this.form));
+			http
+				.post(`/attraction/search`, JSON.stringify(this.form))
+				.then((response) => { console.log(response.data) });
 		},
 		onReset(event) {
 			event.preventDefault();
