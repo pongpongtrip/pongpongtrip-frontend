@@ -3,56 +3,16 @@
 		<div class="row">
 			<div class="col-md-1"></div>
 			<div class="col-md-10">
-				<div class="text-center">
-					<span class="fs-2 border-bottom border-5 border-dark border-opacity-50"
-						>전국 관광지 정보</span
-					>
-				</div>
-				<!-- 관광지 검색 start -->
-				<form class="d-flex my-3" action="${root}/attraction/search" method="post">
-					<input type="hidden" name="action" value="tripsearch" />
-					<select id="search-area" class="form-select me-2" name="ssido_code">
-						<option value="0" selected>검색 할 지역 선택</option>
-						<!-- <option value="1">서울</option>
-            <option value="2">서울</option>
-            <option value="3">서울</option>
-            <option value="4">서울</option>
-            <option value="5">서울</option>
-            <option value="6">서울</option>
-            <option value="7">서울</option>
-            <option value="8">서울</option> -->
-					</select>
-					<select id="search-content-id" class="form-select me-2" name="scontent_type_id">
-						<option value="0" selected>관광지 유형</option>
-						<option value="12">관광지</option>
-						<option value="14">문화시설</option>
-						<option value="15">축제공연행사</option>
-						<option value="25">여행코스</option>
-						<option value="28">레포츠</option>
-						<option value="32">숙박</option>
-						<option value="38">쇼핑</option>
-						<option value="39">음식점</option>
-					</select>
-					<input
-						id="search-keyword"
-						class="form-control me-2"
-						type="search"
-						name="title"
-						placeholder="검색어"
-						aria-label="검색어"
-					/>
-					<button id="btn-search" class="btn btn-outline-success w-25" type="submit">검색</button>
-				</form>
 
 				<!-- kakao map start -->
 				<div id="map" class="mt-3" style="width: 100%; height: 700px"></div>
 
 				<!-- kakao map end -->
 				<button @click="displayMarker(markerPositions1)">marker set 1</button>
-				<button @click="displayMarker(markerPositions2)">marker set 2</button>
-				<button @click="displayMarker([])">marker set 3 (empty)</button>
+				<!-- <button @click="displayMarker(markerPositions2)">marker set 2</button>
+				<button @click="displayMarker([])">marker set 3 (empty)</button> -->
 				<button @click="displayInfoWindow">infowindow</button>
-
+				
 				<!-- <div class="row">
           <table class="table table-striped" style="display: none">
             <thead>
@@ -78,56 +38,31 @@
 
 export default {
 	name: 'MapView',
-
+	props: 
+		['markerItems']
+		
+	,
 	data() {
 		return {
 			markerPositions1: [
-				[33.452278, 126.567803],
-				[33.452671, 126.574792],
-				[33.451744, 126.572441],
+				...this.markerItems
 			],
-			markerPositions2: [
-				[37.499590490909185, 127.0263723554437],
-				[37.499427948430814, 127.02794423197847],
-				[37.498553760499505, 127.02882598822454],
-				[37.497625593121384, 127.02935713582038],
-				[37.49629291770947, 127.02587362608637],
-				[37.49754540521486, 127.02546694890695],
-				[37.49646391248451, 127.02675574250912],
-			],
+			// markerPositions2: [
+			// 	[37.499590490909185, 127.0263723554437],
+			// 	[37.499427948430814, 127.02794423197847],
+			// 	[37.498553760499505, 127.02882598822454],
+			// 	[37.497625593121384, 127.02935713582038],
+			// 	[37.49629291770947, 127.02587362608637],
+			// 	[37.49754540521486, 127.02546694890695],
+			// 	[37.49646391248451, 127.02675574250912],
+			// ],
+			
 			markers: [],
 			infowindow: null,
 		};
 	},
 
 	mounted() {
-		const serviceKey =
-			'T%2FAhyTaE0rj803LnvkkF61K45eKKUhlcmpHuGSwflWQGhTM%2BF9fvx%2By%2BlRXOf2b8VQQOPjConQOOrw%2F47eNkxg%3D%3D';
-		// index page 로딩 후 전국의 시도 설정.
-		let areaUrl =
-			'https://apis.data.go.kr/B551011/KorService1/areaCode1?serviceKey=' +
-			serviceKey +
-			'&numOfRows=20&pageNo=1&MobileOS=ETC&MobileApp=AppTest&_type=json';
-
-		// // fetch(areaUrl, { method: "GET" }).then(function (response) { return response.json() }).then(function (data) { makeOption(data); });
-		fetch(areaUrl, { method: 'GET' })
-			.then((response) => response.json())
-			.then((data) => makeOption(data));
-
-		function makeOption(data) {
-			let areas = data.response.body.items.item;
-			// console.log(areas);
-			let sel = document.getElementById('search-area');
-			areas.forEach((area) => {
-				let opt = document.createElement('option');
-				opt.setAttribute('value', area.code);
-				opt.appendChild(document.createTextNode(area.name));
-
-				sel.appendChild(opt);
-				console.log('시/도 코드 생성');
-			});
-		}
-
 		console.log('sdfsdfsd');
 		if (window.kakao && window.kakao.maps) {
 			this.initMap();
@@ -140,6 +75,10 @@ export default {
 				'//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=38eedb9483c38e015735b4a1e007979b&libraries=services,clusterer,drawing';
 			document.head.appendChild(script);
 		}
+	},
+	updated() {
+		console.log("updated!@!@!");
+		console.log(this.markerItems);
 	},
 	methods: {
 		initMap() {
@@ -160,11 +99,14 @@ export default {
 			this.map.relayout();
 		},
 		displayMarker(markerPositions) {
+			// console.log("!!!!!");
+			console.log(markerPositions);
+			console.log(this.markerItems);
 			if (this.markers.length > 0) {
 				this.markers.forEach((marker) => marker.setMap(null));
 			}
 
-			const positions = markerPositions.map((position) => new kakao.maps.LatLng(...position));
+			const positions = this.markerItems.map((position) => new kakao.maps.LatLng(...position));
 
 			if (positions.length > 0) {
 				this.markers = positions.map(
