@@ -34,7 +34,7 @@
 			</b-form>
 			<!--form  end-->
 
-			<div class="row mt-4">
+			<div class="row w-100 mt-4">
 				<!-- kakao map start -->
 				<div style="width: 700px; height: 700px">
 					<KaKaoMap />
@@ -42,7 +42,7 @@
 				<!-- kakao map end -->
 				<div class="col">
 					<h2>관광지 목록</h2>
-					<trip-items></trip-items>
+					<plan-items :plan-items="planItems"></plan-items>
 				</div>
 			</div>
 		</b-container>
@@ -50,17 +50,19 @@
 </template>
 
 <script>
-import TripItems from '@/components/TripItems.vue';
+import http from "@/api/http.js";
+import PlanItems from '@/components/PlanItems.vue';
 import KaKaoMap from '@/components/KaKaoMap.vue';
 
 export default {
 	name: 'MyPlanView',
 	components: {
-		TripItems,
+		PlanItems,
 		KaKaoMap,
 	},
 	data() {
 		return {
+			planItems: [],
 			form: {
 				sido_code: 0,
 				content_type_id: 0,
@@ -68,23 +70,23 @@ export default {
 			},
 			sido_codes: [
 				{ text: '검색 할 지역 선택', value: 0 },
-				{ text: '서울', value: null },
-				{ text: '인천', value: null },
-				{ text: '대전', value: null },
-				{ text: '대구', value: null },
-				{ text: '광주', value: null },
-				{ text: '부산', value: null },
-				{ text: '울산', value: null },
-				{ text: '세종특별자치시', value: null },
-				{ text: '경기도', value: null },
-				{ text: '강원도', value: null },
-				{ text: '충청북도', value: null },
-				{ text: '충청남도', value: null },
-				{ text: '경상북도', value: null },
-				{ text: '경상남도', value: null },
-				{ text: '전라북도', value: null },
-				{ text: '전라남도', value: null },
-				{ text: '제주도', value: null },
+				{ text: '서울', value: 1 },
+				{ text: '인천', value: 2 },
+				{ text: '대전', value: 3 },
+				{ text: '대구', value: 4 },
+				{ text: '광주', value: 5 },
+				{ text: '부산', value: 6 },
+				{ text: '울산', value: 7 },
+				{ text: '세종특별자치시', value: 8 },
+				{ text: '경기도', value: 31 },
+				{ text: '강원도', value: 32 },
+				{ text: '충청북도', value: 33 },
+				{ text: '충청남도', value: 34 },
+				{ text: '경상북도', value: 35 },
+				{ text: '경상남도', value: 36 },
+				{ text: '전라북도', value: 37 },
+				{ text: '전라남도', value: 38 },
+				{ text: '제주도', value: 39 },
 			],
 			content_type_ids: [
 				{ text: '관광지 유형', value: 0 },
@@ -103,6 +105,15 @@ export default {
 		onSubmit(event) {
 			event.preventDefault();
 			alert(JSON.stringify(this.form));
+			http
+				.post(`/attraction/search`, JSON.stringify(this.form))
+				.then((response) => {
+					console.log(response.data);
+
+					// 받아온 데이터를 가공하여 tripItems에 할당
+					this.planItems = response.data;
+					console.log(this.planItems);
+				});
 		},
 		onReset(event) {
 			event.preventDefault();
