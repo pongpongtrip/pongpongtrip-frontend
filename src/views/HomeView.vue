@@ -1,161 +1,284 @@
 <template>
-	<div>
-		<b-carousel
-			id="carousel-1"
-			v-model="slide"
-			:interval="4000"
-			controls
-			indicators
-			background="#ababab"
-			img-width="1024"
-			img-height="480"
-			style="text-shadow: 1px 1px 2px #333"
-			@sliding-start="onSlideStart"
-			@sliding-end="onSlideEnd"
-		>
-			<!-- Text slides with image -->
-			<b-carousel-slide
-				caption="First slide"
-				text="Nulla vitae elit libero, a pharetra augue mollis interdum."
-				img-src="https://picsum.photos/1024/480/?image=52"
-			></b-carousel-slide>
+  <div>
+    <b-carousel
+      id="carousel-1"
+      v-model="slide"
+      :interval="4000"
+      controls
+      indicators
+      background="#ababab"
+      img-width="1024"
+      img-height="480"
+      style="text-shadow: 1px 1px 2px #333"
+      @sliding-start="onSlideStart"
+      @sliding-end="onSlideEnd"
+    >
+      <b-carousel-slide>
+        <template #img>
+          <img
+            class="d-block img-fluid w-100 ignore-aspect-ratio"
+            src="@/assets/main_picture_1.jpg"
+            alt="image slot"
+          />
+        </template>
+        <div class="slide-overlay">
+          <h1 class="slide-text mb-4">PONG PONG</h1>
+        </div>
+      </b-carousel-slide>
+      <b-carousel-slide>
+        <template #img>
+          <img class="d-block img-fluid w-100" src="@/assets/main_picture_2.jpg" alt="image slot" />
+        </template>
+      </b-carousel-slide>
+      <b-carousel-slide>
+        <template #img>
+          <img class="d-block img-fluid w-100" src="@/assets/main_picture_3.jpg" alt="image slot" />
+        </template>
+      </b-carousel-slide>
+      <b-carousel-slide>
+        <template #img>
+          <img class="d-block img-fluid w-100" src="@/assets/main_picture_4.jpg" alt="image slot" />
+        </template>
+      </b-carousel-slide>
+    </b-carousel>
 
-			<!-- Slides with custom text -->
-			<b-carousel-slide img-src="https://picsum.photos/1024/480/?image=54">
-				<h1>Hello world!</h1>
-			</b-carousel-slide>
-
-			<!-- Slides with image only -->
-			<b-carousel-slide img-src="https://picsum.photos/1024/480/?image=58"></b-carousel-slide>
-
-			<!-- Slides with img slot -->
-			<!-- Note the classes .d-block and .img-fluid to prevent browser default image alignment -->
-			<b-carousel-slide>
-				<template #img>
-					<img
-						class="d-block img-fluid w-100"
-						width="1024"
-						height="480"
-						src="https://picsum.photos/1024/480/?image=55"
-						alt="image slot"
-					/>
-				</template>
-			</b-carousel-slide>
-
-			<!-- Slide with blank fluid image to maintain slide aspect ratio -->
-			<b-carousel-slide caption="Blank Image" img-blank img-alt="Blank image">
-				<p>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eros felis, tincidunt
-					a tincidunt eget, convallis vel est. Ut pellentesque ut lacus vel interdum.
-				</p>
-			</b-carousel-slide>
-		</b-carousel>
-
-		<p class="mt-4">
-			Slide #: {{ slide }}<br />
-			Sliding: {{ sliding }}
-		</p>
-
-		<b-container>
-			<!--대한민국 관광지 start  -->
-			<!-- animate__animated animate__fadeInDown" -->
-			<div>
-				<h2>대한민국 관광지</h2>
-				<b-card-group columns>
-					<b-card
-						img-src="https://picsum.photos/400/400/?image=43"
-						img-alt="Image"
-						overlay
-					></b-card>
-					<b-card
-						img-src="https://picsum.photos/400/400/?image=43"
-						img-alt="Image"
-						overlay
-					></b-card>
-					<b-card
-						img-src="https://picsum.photos/400/400/?image=43"
-						img-alt="Image"
-						overlay
-					></b-card>
-					<b-card
-						img-src="https://picsum.photos/400/400/?image=43"
-						img-alt="Image"
-						overlay
-					></b-card>
-					<b-card
-						img-src="https://picsum.photos/400/400/?image=43"
-						img-alt="Image"
-						overlay
-					></b-card>
-					<b-card
-						img-src="https://picsum.photos/400/400/?image=43"
-						img-alt="Image"
-						overlay
-					></b-card>
-				</b-card-group>
-			</div>
-			<!--대한민국 관광지 end  -->
-
-			<!--대한민국 축제 start  -->
-			<!-- animate__animated animate__fadeInDown" -->
-			<div>
-				<h2>대한민국 축제</h2>
-				<b-card-group columns>
-					<b-card
-						img-src="https://picsum.photos/400/400/?image=43"
-						img-alt="Image"
-						overlay
-					></b-card>
-					<b-card
-						img-src="https://picsum.photos/400/400/?image=43"
-						img-alt="Image"
-						overlay
-					></b-card>
-					<b-card
-						img-src="https://picsum.photos/400/400/?image=43"
-						img-alt="Image"
-						overlay
-					></b-card>
-					<b-card
-						img-src="https://picsum.photos/400/400/?image=43"
-						img-alt="Image"
-						overlay
-					></b-card>
-					<b-card
-						img-src="https://picsum.photos/400/400/?image=43"
-						img-alt="Image"
-						overlay
-					></b-card>
-					<b-card
-						img-src="https://picsum.photos/400/400/?image=43"
-						img-alt="Image"
-						overlay
-					></b-card>
-				</b-card-group>
-			</div>
-			<!--대한민국 축제 end  -->
-		</b-container>
-	</div>
+    <!-- 전국 베스트 숙소 start -->
+    <div class="container">
+      <div class="row mt-4 mb-4">
+        <div class="mt-4">
+          <h3 class="text-start">전국 베스트 숙소 <b-icon icon="house-fill"></b-icon></h3>
+          <div class="card-deck">
+            <div
+              v-for="(cards_hotel, index) in paginatedCards_hotel"
+              :key="index"
+              class="card mb-4"
+            >
+              <img :src="cards_hotel.image" class="card-img-top" :alt="cards_hotel.title" />
+              <div class="card-body">
+                <h5 class="card-title">{{ cards_hotel.title }}</h5>
+                <p class="card-text">{{ cards_hotel.description }}</p>
+              </div>
+            </div>
+          </div>
+          <nav aria-label="Card Pagination Best Hotel">
+            <ul class="pagination justify-content-center">
+              <li class="page-item" :class="{ disabled: currentPage_hotel === 1 }">
+                <a
+                  class="page-link"
+                  href="#"
+                  @click.prevent="goToPage_Hotel(currentPage_hotel - 1)"
+                >
+                  <b-icon icon="chevron-compact-left"></b-icon>
+                </a>
+              </li>
+              <!-- <li
+              class="page-item"
+              v-for="page in totalPages"
+              :key="page"
+              :class="{ active: currentPage === page }"
+            >
+              <a class="page-link" href="#" @click="goToPage(page)">{{ page }}</a>
+            </li> -->
+              <li class="page-item" :class="{ disabled: currentPage_hotel === totalPages_hotel }">
+                <a
+                  class="page-link"
+                  href="#"
+                  @click.prevent="goToPage_Hotel(currentPage_hotel + 1)"
+                >
+                  <b-icon icon="chevron-compact-right"></b-icon>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      <div class="row">
+        <div class="mt-4">
+          <h3 class="text-start">전국 베스트 관광지 <b-icon icon="geo-fill"></b-icon></h3>
+          <div class="card-deck">
+            <div
+              v-for="(cards_attraction, index) in paginatedCards_attraction"
+              :key="index"
+              class="card mb-4"
+            >
+              <img
+                :src="cards_attraction.image"
+                class="card-img-top"
+                :alt="cards_attraction.title"
+              />
+              <div class="card-body">
+                <h5 class="card-title">{{ cards_attraction.title }}</h5>
+                <p class="card-text">{{ cards_attraction.description }}</p>
+              </div>
+            </div>
+          </div>
+          <nav aria-label="Card Pagination Best Attraction">
+            <ul class="pagination justify-content-center">
+              <li class="page-item" :class="{ disabled: currentPage_attraction === 1 }">
+                <a
+                  class="page-link"
+                  href="#"
+                  @click.prevent="goToPage_Attraction(currentPage_attraction - 1)"
+                >
+                  <b-icon icon="chevron-compact-left"></b-icon>
+                </a>
+              </li>
+              <!-- <li
+              class="page-item"
+              v-for="page in totalPages"
+              :key="page"
+              :class="{ active: currentPage === page }"
+            >
+              <a class="page-link" href="#" @click="goToPage(page)">{{ page }}</a>
+            </li> -->
+              <li
+                class="page-item"
+                :class="{ disabled: currentPage_attraction === totalPages_attraction }"
+              >
+                <a
+                  class="page-link"
+                  href="#"
+                  @click.prevent="goToPage_Attraction(currentPage_attraction + 1)"
+                >
+                  <b-icon icon="chevron-compact-right"></b-icon>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 export default {
-	name: 'HomeView',
-	data() {
-		return {
-			slide: 0,
-			sliding: null,
-			isHovered: false,
-		};
-	},
-	methods: {
-		onSlideStart() {
-			this.sliding = true;
-		},
-		onSlideEnd() {
-			this.sliding = false;
-		},
-	},
+  name: "HomeView",
+  data() {
+    return {
+      slide: 0,
+      sliding: null,
+      isHovered: false,
+      show: true,
+      cards_hotel: [
+        // 카드 데이터를 알맞게 작성하세요
+        { title: "Card 1", description: "Description 1", image: "https://picsum.photos/300/200" },
+        { title: "Card 2", description: "Description 2", image: "https://picsum.photos/300/200" },
+        { title: "Card 3", description: "Description 3", image: "https://picsum.photos/300/200" },
+        { title: "Card 4", description: "Description 4", image: "https://picsum.photos/300/200" },
+        { title: "Card 5", description: "Description 4", image: "https://picsum.photos/300/200" },
+        { title: "Card 6", description: "Description 4", image: "https://picsum.photos/300/200" },
+        { title: "Card 7", description: "Description 4", image: "https://picsum.photos/300/200" },
+        { title: "Card 8", description: "Description 4", image: "https://picsum.photos/300/200" },
+        { title: "Card 9", description: "Description 4", image: "https://picsum.photos/300/200" },
+        // 더 많은 카드 데이터를 추가하세요
+      ],
+      currentPage_hotel: 1,
+      cardsPerPage_hotel: 4,
+      cards_attraction: [
+        // 카드 데이터를 알맞게 작성하세요
+        {
+          title: "Att Card 1",
+          description: "Description 1",
+          image: "https://picsum.photos/300/200",
+        },
+        {
+          title: "Att Card 2",
+          description: "Description 2",
+          image: "https://picsum.photos/300/200",
+        },
+        {
+          title: "Att Card 3",
+          description: "Description 3",
+          image: "https://picsum.photos/300/200",
+        },
+        {
+          title: "Att Card 4",
+          description: "Description 4",
+          image: "https://picsum.photos/300/200",
+        },
+        {
+          title: "Att Card 5",
+          description: "Description 4",
+          image: "https://picsum.photos/300/200",
+        },
+        {
+          title: "Att Card 6",
+          description: "Description 4",
+          image: "https://picsum.photos/300/200",
+        },
+        {
+          title: "Att Card 7",
+          description: "Description 4",
+          image: "https://picsum.photos/300/200",
+        },
+        {
+          title: "Att Card 8",
+          description: "Description 4",
+          image: "https://picsum.photos/300/200",
+        },
+        {
+          title: "Att Card 9",
+          description: "Description 4",
+          image: "https://picsum.photos/300/200",
+        },
+        // 더 많은 카드 데이터를 추가하세요
+      ],
+      currentPage_attraction: 1,
+      cardsPerPage_attraction: 4,
+    };
+  },
+  computed: {
+    paginatedCards_hotel() {
+      const startIndex_hotel = (this.currentPage_hotel - 1) * this.cardsPerPage_hotel;
+      const endIndex_hotel = startIndex_hotel + this.cardsPerPage_hotel;
+      return this.cards_hotel.slice(startIndex_hotel, endIndex_hotel);
+    },
+    paginatedCards_attraction() {
+      const startIndex_attraction =
+        (this.currentPage_attraction - 1) * this.cardsPerPage_attraction;
+      const endIndex_attraction = startIndex_attraction + this.cardsPerPage_attraction;
+      return this.cards_hotel.slice(startIndex_attraction, endIndex_attraction);
+    },
+    totalPages_hotel() {
+      return Math.ceil(this.cards_hotel.length / this.cardsPerPage_hotel);
+    },
+    totalPages_attraction() {
+      return Math.ceil(this.cards_attraction.length / this.cardsPerPage_attraction);
+    },
+  },
+  methods: {
+    onSlideStart() {
+      this.sliding = true;
+    },
+    onSlideEnd() {
+      this.sliding = false;
+    },
+    goToPage_Hotel(page) {
+      if (page >= 1 && page <= this.totalPages_hotel) {
+        this.currentPage_hotel = page;
+      }
+    },
+    goToPage_Attraction(page) {
+      if (page >= 1 && page <= this.totalPages_attraction) {
+        this.currentPage_attraction = page;
+      }
+    },
+  },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.d-block {
+  opacity: 50%;
+}
+
+.slide-text {
+  color: white;
+  font-size: 48px;
+  font-weight: bold;
+}
+
+.text-start {
+  text-align: start;
+}
+</style>

@@ -1,8 +1,13 @@
 <template>
   <!--slide start  -->
   <div>
-    <b-navbar toggleable="lg" type="dark" variant="dark">
-      <b-navbar-brand href="#">Trip</b-navbar-brand>
+    <b-navbar toggleable="lg" type="light" variant="light" class="custom-navbar">
+      <!-- <b-navbar-brand href="#">Trip</b-navbar-brand> -->
+      <b-navbar-brand>
+        <!-- <img src="@/assets/logo1.png" alt="사진" style="height: 50px; width: auto" /> -->
+        <img src="@/assets/logo3.png" alt="사진" style="height: 50px; width: auto" />
+        <img src="@/assets/logo2.png" alt="사진" style="height: 50px; width: auto" />
+      </b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -45,3 +50,8 @@ export default {
   },
 };
 </script>
+<style>
+.custom-navbar {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+</style>
