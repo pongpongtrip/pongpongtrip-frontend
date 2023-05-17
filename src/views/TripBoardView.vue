@@ -3,9 +3,12 @@
 		<h2 class="mt-4">공유 게시판</h2>
 		<b-container>
 			<div class="col-md-2 text-start">
-				<button type="button" id="btn-mv-register" class="btn btn-outline-primary btn-sm">
-					글쓰기
-				</button>
+				<router-link tag="p" to="/tripboard/write">
+					<button type="button" id="btn-mv-register" class="btn btn-outline-primary btn-sm">
+						글쓰기
+					</button>
+				</router-link>
+				
 			</div>
 			<div>
 				<b-form inline class="justify-content-end mb-4" @submit="onSubmit" @reset="onReset">
@@ -30,14 +33,21 @@
 				</b-form>
 			</div>
 			<div>
-				<b-table hover :items="articles" :fields="fields"></b-table>
+				<!-- <b-table hover :items="articles" :fields="fields"></b-table> -->
+				<board-items :board-items="articles"></board-items>
 			</div>
 		</b-container>
 	</div>
 </template>
 <script>
+import http from "@/api/http.js";
+import BoardItems from "@/components/BoardItems.vue";
 export default {
 	name: 'TripBoardView',
+	components: {
+		BoardItems,
+
+	},	
 	data() {
 		return {
 			fields: [
@@ -57,6 +67,15 @@ export default {
 				{ text: '작성자', value: 'userid' },
 			],
 		};
+	},
+	created() {
+		http
+			.get(`/board/list`)
+			.then((response) => {
+				console.log(response.data);
+				this.articles = response.data;
+				
+			});
 	},
 	methods: {
 		onSubmit: function(){
