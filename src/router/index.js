@@ -10,6 +10,7 @@ import MemberInfoView from '@/components/member/MemberInfoView.vue';
 import RegistView from '@/components/member/RegistView.vue';
 import MemberUpdateView from '@/components/member/MemberUpdateView.vue';
 import MemberList from '@/components/admin/MemberList.vue';
+import TripBoardWrite from '@/views/TripBoardWrite.vue'
 
 Vue.use(VueRouter);
 
@@ -38,6 +39,16 @@ const routes = [
 		path: '/tripboard',
 		name: 'tripboard',
 		component: TripBoardView,
+	},
+	{
+		path: '/tripboard/write',
+		name: 'boardwrite',
+		component: TripBoardWrite,
+	},
+	{
+		path: '/',
+		name: 'boardDetail',
+		component: HomeView,
 	},
 	{
 		path: '/login',
