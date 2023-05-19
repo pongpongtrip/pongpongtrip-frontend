@@ -40,8 +40,6 @@
 	</div>
 </template>
 <script>
-import http from "@/api/http.js";
-
 export default {
 	name: 'BoardItems',
 	props: {

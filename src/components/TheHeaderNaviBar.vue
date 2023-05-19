@@ -3,7 +3,7 @@
   <div>
     <b-navbar toggleable="lg" type="light" variant="light" class="custom-navbar">
       <!-- <b-navbar-brand href="#">Trip</b-navbar-brand> -->
-      <b-navbar-brand>
+      <b-navbar-brand to="/">
         <!-- <img src="@/assets/logo1.png" alt="사진" style="height: 50px; width: auto" /> -->
         <img src="@/assets/logo3.png" alt="사진" style="height: 50px; width: auto" />
         <img src="@/assets/logo2.png" alt="사진" style="height: 50px; width: auto" />
@@ -20,8 +20,23 @@
           <b-nav-item to="/tripboard">여행정보 공유</b-nav-item>
           <b-nav-item to="/hotplace">핫 플레이스</b-nav-item>
 
-          <!-- <b-nav-item href="#" disabled>Disabled</b-nav-item> -->
-          <b-nav-item-dropdown right>
+          <!-- after login -->
+          <b-nav-item-dropdown right v-if="userInfo">
+            <!-- Using 'button-content' slot -->
+            <template #button-content>
+              <b-icon icon="person-circle"></b-icon>
+              {{ userInfo.userName }}({{ userInfo.userId }})님.
+              <!-- <em>User</em> -->
+            </template>
+            <b-dropdown-item to="/memberinfo"> 회원정보</b-dropdown-item>
+            <b-dropdown-item to="/memberlist" v-if="isAdmin" v-model="isAdmin">
+              회원관리</b-dropdown-item
+            >
+            <b-dropdown-item @click.prevent="onClickLogout"> 로그아웃</b-dropdown-item>
+          </b-nav-item-dropdown>
+
+          <!-- before login -->
+          <b-nav-item-dropdown right v-else>
             <!-- Using 'button-content' slot -->
             <template #button-content>
               <b-icon icon="person-circle"></b-icon>
@@ -29,9 +44,6 @@
             </template>
             <b-dropdown-item to="/login"> 로그인</b-dropdown-item>
             <b-dropdown-item to="/regist"> 회원가입</b-dropdown-item>
-            <b-dropdown-item to="/memberinfo"> 회원정보</b-dropdown-item>
-            <b-dropdown-item to="/memberlist"> 회원관리</b-dropdown-item>
-            <b-dropdown-item to="/logout"> 로그아웃</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-collapse>
@@ -40,6 +52,10 @@
   <!--slide end  -->
 </template>
 <script>
+import { mapState, mapGetters, mapActions } from "vuex";
+
+const memberStore = "memberStore";
+
 export default {
   name: "TheHeaderNaviBar",
   components: {},
@@ -47,6 +63,34 @@ export default {
     return {
       message: "",
     };
+  },
+  computed: {
+    ...mapState(memberStore, ["isLogin", "userInfo"]),
+    ...mapGetters(["checkUserInfo"]),
+    isAdmin() {
+      return this.checkUserIsAdmin();
+    },
+  },
+  methods: {
+    ...mapActions(memberStore, ["userLogout"]),
+    onClickLogout() {
+      // this.SET_IS_LOGIN(false);
+      // this.SET_USER_INFO(null);
+      // sessionStorage.removeItem("access-token");
+      // if (this.$route.path != "/") this.$router.push({ name: "main" });
+
+      //vuex actions에서 userLogout 실행(Backend에 저장 된 리프레시 토큰 없애기
+      //+ satate에 isLogin, userInfo 정보 변경)
+      // this.$store.dispatch("userLogout", this.userInfo.userid);
+      this.userLogout(this.userInfo.userid);
+      sessionStorage.removeItem("access-token"); //저장된 토큰 없애기
+      sessionStorage.removeItem("refresh-token"); //저장된 토큰 없애기
+      if (this.$route.path != "/") this.$router.push({ name: "home" });
+    },
+    checkUserIsAdmin() {
+      if (this.userInfo.userId === "admin") return true;
+      else false;
+    },
   },
 };
 </script>

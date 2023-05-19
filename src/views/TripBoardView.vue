@@ -40,7 +40,7 @@
 	</div>
 </template>
 <script>
-import http from "@/api/http.js";
+import http from "@/api/httpDefault.js";
 import BoardItems from "@/components/BoardItems.vue";
 export default {
 	name: 'TripBoardView',
