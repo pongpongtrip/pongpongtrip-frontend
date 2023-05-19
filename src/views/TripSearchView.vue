@@ -35,7 +35,7 @@
 			<!--form  end-->
 
 			<!-- kakao map start -->
-			<KaKaoMap :markerItems="markers"/>
+			<KaKaoMap :markerItems="this.markers"/>
 			<!-- kakao map end -->
 
 			<h2 class="mt-4">관광지 목록</h2>
@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import http from "@/api/http.js";
+import http from "@/api/httpDefault.js";
 import TripItems from '@/components/TripItems.vue';
 import KaKaoMap from '@/components/KaKaoMap.vue';
 
@@ -113,15 +113,12 @@ export default {
 					for (let i = 0; i < response.data.length; i++) {
 						let a = response.data[i].latitude;
 						let b = response.data[i].longitude;
-						// console.log(a);
-						// console.log(b);
-						// console.log([a, b]);
-						marks.push([a, b]);
+						this.markers.push([a, b]);
 					}
-					// console.log(marks);
-					this.markers = marks;
+					// this.markers = marks;
 					console.log(this.tripItems);
 					console.log(this.markers);
+					
 				});
 		},
 		onReset(event) {
