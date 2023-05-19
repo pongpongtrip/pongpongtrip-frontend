@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import http from "@/api/http.js";
+import http from "@/api/httpDefault.js";
 
 export default {
   data() {

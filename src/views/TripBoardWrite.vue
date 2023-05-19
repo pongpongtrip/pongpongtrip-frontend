@@ -64,7 +64,7 @@
   </template>
 
 <script>
-import http from "@/api/http";
+import http from "@/api/httpDefault.js";
 
 export default {
     name: 'boardWrite',
@@ -87,11 +87,11 @@ export default {
             console.log(this.form.content);
             console.log(this.form.upfile);
             http
-				.post(`/board/write`, JSON.stringify(this.form))
-				.then((response) => {
-					console.log(response.data);
-                    this.$router.push('/tripboard').catch(() => { console.log("화면 이동 에러") });
-				});
+              .post(`/board/write`, JSON.stringify(this.form))
+              .then((response) => {
+                console.log(response.data);
+                          this.$router.push('/tripboard').catch(() => { console.log("화면 이동 에러") });
+              });
             
         },
         goToList: function () {
