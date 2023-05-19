@@ -8,7 +8,7 @@
 				<div id="map" class="mt-3" style="width: 100%; height: 700px"></div>
 
 				<!-- kakao map end -->
-				<button @click="displayMarker(markerPositions1)">marker set 1</button>
+				<!-- <button @click="displayMarker(markerPositions1)">marker set 1</button> -->
 				<!-- <button @click="displayMarker(markerPositions2)">marker set 2</button>
 				<button @click="displayMarker([])">marker set 3 (empty)</button> -->
 				<button @click="displayInfoWindow">infowindow</button>
@@ -38,8 +38,12 @@
 
 export default {
 	name: 'MapView',
-	props: 
-		['markerItems']
+	props: {
+		markerItems: {
+			type:Array
+		}
+	}
+		
 		
 	,
 	data() {
@@ -57,7 +61,7 @@ export default {
 			// 	[37.49646391248451, 127.02675574250912],
 			// ],
 			
-			markers: [],
+			markers: [this.markerItems],
 			infowindow: null,
 		};
 	},
@@ -75,10 +79,13 @@ export default {
 				'//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=38eedb9483c38e015735b4a1e007979b&libraries=services,clusterer,drawing';
 			document.head.appendChild(script);
 		}
+		
 	},
-	updated() {
-		console.log("updated!@!@!");
-		console.log(this.markerItems);
+	watch:{
+		markerItems() {
+			this.displayMarker();
+		}
+		
 	},
 	methods: {
 		initMap() {
@@ -98,13 +105,10 @@ export default {
 			container.style.height = `${size}px`;
 			this.map.relayout();
 		},
-		displayMarker(markerPositions) {
-			// console.log("!!!!!");
-			console.log(markerPositions);
-			console.log(this.markerItems);
-			if (this.markers.length > 0) {
-				this.markers.forEach((marker) => marker.setMap(null));
-			}
+		displayMarker() {
+			// if (this.markers.length > 0) {
+			// 	this.markers.forEach((marker) => marker.setMap(null));
+			// }
 
 			const positions = this.markerItems.map((position) => new kakao.maps.LatLng(...position));
 

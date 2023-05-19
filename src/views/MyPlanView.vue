@@ -37,7 +37,7 @@
 			<div class="row w-100 mt-4">
 				<!-- kakao map start -->
 				<div style="width: 700px; height: 700px">
-					<KaKaoMap />
+					<KaKaoMap :markerItems="this.markers"/>
 				</div>
 				<!-- kakao map end -->
 				<div class="col">
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import http from "@/api/http.js";
+import http from "@/api/httpDefault.js";
 import PlanItems from '@/components/PlanItems.vue';
 import KaKaoMap from '@/components/KaKaoMap.vue';
 
@@ -63,6 +63,7 @@ export default {
 	data() {
 		return {
 			planItems: [],
+			markers: [],
 			form: {
 				sido_code: 0,
 				content_type_id: 0,
@@ -110,6 +111,16 @@ export default {
 				.then((response) => {
 					console.log(response.data);
 
+					// 받아온 데이터를 가공하여 tripItems에 할당
+					this.tripItems = response.data;
+					let marks = [];
+
+					for (let i = 0; i < response.data.length; i++) {
+						let a = response.data[i].latitude;
+						let b = response.data[i].longitude;
+						this.markers.push([a, b]);
+					}
+					
 					// 받아온 데이터를 가공하여 tripItems에 할당
 					this.planItems = response.data;
 					console.log(this.planItems);
