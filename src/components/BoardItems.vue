@@ -1,6 +1,8 @@
 <template>
 	<div>
-		<b-table @row-clicked="onRowClicked" hover :items="boardItems" :fields="fields">
+		<b-table @row-clicked="onRowClicked" hover :items="boardItems" :fields="fields" 
+		:current-page="currentPage"
+        :per-page="perPage">
 		<template #cell(articleNo)="data">
 			<!-- <router-link
 			:to="{
@@ -9,8 +11,11 @@
 			}"
 			>{{ data.value }}
 			</router-link> -->
-			<p>{{ data.value }}</p>
+			<span>{{ data.value }}</span>
+			<!-- <span style="visibility: hidden;">{{ data.value }}</span> -->
+			<!-- <p>{{ increaseIndex() }}</p> -->
 		</template>
+		
 		<template #cell(subject)="data">
 			<p>{{ data.value }}</p>
 		</template>
@@ -24,10 +29,19 @@
 			<p>{{ data.value }}</p>
 		</template>
 
-		</b-table>
+		</b-table>	
+
+		<b-pagination
+			v-model="currentPage"
+			:total-rows="rows"
+		:per-page="perPage"
+		class="justify-content-center"
+		/>
 	</div>
 </template>
 <script>
+import http from "@/api/http.js";
+
 export default {
 	name: 'BoardItems',
 	props: {
@@ -39,6 +53,10 @@ export default {
 	data() {
 		return {
 			// articles: [...this.boardItems],
+			index: 0,
+			currentPage: 1,
+			totalPages: 0,
+			perPage: 5,
 			fields: [
 				{ key: 'articleNo', label: '글번호' },
 				{ key: 'subject', label: '제목' },
@@ -51,11 +69,32 @@ export default {
 	},
 	methods: {
 		onRowClicked: function(item, index, event) {
-			console.log(item),
-			console.log(index),
-				console.log(event)
+			console.log(item.articleNo);
+			this.$store.commit('setArticleNo', item.articleNo);
+			console.log(this.$store.state.articleNo);
+			
+			// this.$store.commit('articleNo', item.articleNo);
+			this.$router.push('/tripboard/detail').catch(()=>{});
+				
 		},
+		increaseIndex: function() {
+			// if (this.index > this.rows) {
+			// 	return
+			// }
+			this.index = this.index+1;
+			return this.index;
+		}
+	},
+	computed: {
+		rows(){
+			return this.boardItems.length;
+    }
 	}
 	
 };
 </script>
+<style scoped>
+.center {
+	align-content: center;
+}
+</style>

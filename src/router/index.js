@@ -11,6 +11,8 @@ import RegistView from '@/components/member/RegistView.vue';
 import MemberUpdateView from '@/components/member/MemberUpdateView.vue';
 import MemberList from '@/components/admin/MemberList.vue';
 import TripBoardWrite from '@/views/TripBoardWrite.vue';
+import TripBoardDetail from '@/views/TripBoardDetailView.vue';
+import TripModify from '@/views/TripBoardModifyView.vue';
 
 import store from "@/store";
 
@@ -34,6 +36,7 @@ const onlyAuthUser = async (to, from, next) => {
     next();
   }
 };
+
 
 Vue.use(VueRouter);
 
@@ -62,6 +65,7 @@ const routes = [
 		path: '/tripboard',
 		name: 'tripboard',
 		component: TripBoardView,
+		
 	},
 	{
 		path: '/tripboard/write',
@@ -69,9 +73,14 @@ const routes = [
 		component: TripBoardWrite,
 	},
 	{
-		path: '/',
+		path: '/tripboard/detail',
 		name: 'boardDetail',
-		component: HomeView,
+		component: TripBoardDetail,
+	},
+	{
+		path: '/tripboard/modify',
+		name: 'boardModify',
+		component: TripModify,
 	},
 	{
 		path: '/login',
