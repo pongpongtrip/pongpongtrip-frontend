@@ -3,7 +3,7 @@
   <div>
     <b-navbar toggleable="lg" type="light" variant="light" class="custom-navbar">
       <!-- <b-navbar-brand href="#">Trip</b-navbar-brand> -->
-      <b-navbar-brand>
+      <b-navbar-brand to="/">
         <!-- <img src="@/assets/logo1.png" alt="사진" style="height: 50px; width: auto" /> -->
         <img src="@/assets/logo3.png" alt="사진" style="height: 50px; width: auto" />
         <img src="@/assets/logo2.png" alt="사진" style="height: 50px; width: auto" />
@@ -24,8 +24,8 @@
           <b-nav-item-dropdown right v-if="userInfo">
             <!-- Using 'button-content' slot -->
             <template #button-content>
-              {{ userInfo.userName }}({{ userInfo.userId }})님.
               <b-icon icon="person-circle"></b-icon>
+              {{ userInfo.userName }}({{ userInfo.userId }})님.
               <!-- <em>User</em> -->
             </template>
             <b-dropdown-item to="/memberinfo"> 회원정보</b-dropdown-item>

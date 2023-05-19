@@ -28,4 +28,12 @@ async function regist(user,success,fail) {
   await api.post(`/member/regist`,user).then(success).catch(fail);
 }
 
-export { login, findById, tokenRegeneration, logout, isPossibleId, regist };
+async function isCorrectPwd(user, success, fail) { 
+  await api.post(`/member/checkpassword`,JSON.stringify(user)).then(success).catch(fail);
+}
+
+async function update(user,success,fail) {
+  await api.post(`member/update`, JSON.stringify(user)).then(success).catch(fail);
+}
+
+export { login, findById, tokenRegeneration, logout, isPossibleId, regist, isCorrectPwd, update };

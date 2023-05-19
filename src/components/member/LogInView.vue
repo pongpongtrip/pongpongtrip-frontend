@@ -37,10 +37,8 @@
           ></b-form-input>
         </b-form-group>
 
-        <b-button type="reset" variant="white" class="btn-outline-danger">회원가입</b-button>
-        <b-button type="submit" variant="primary" class="mb-2 mr-sm-2 mb-sm-0" @click="confirm"
-          >로그인</b-button
-        >
+        <b-button type="reset" variant="white" class="btn-outline-danger m-2">회원가입</b-button>
+        <b-button type="submit" variant="primary" class="m-2" @click="confirm">로그인</b-button>
       </b-form>
     </b-container>
   </div>
