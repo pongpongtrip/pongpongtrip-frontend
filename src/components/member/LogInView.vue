@@ -77,14 +77,14 @@ export default {
       let token = sessionStorage.getItem("access-token");
       if (this.isLogin) {
         await this.getUserInfo(token);
-        this.$router.push({ name: "home" });
+        this.movePage();
       } else {
         alert("아이디와 비밀번호를 확인해주세요!");
         this.onReset(event);
       }
     },
     movePage() {
-      this.$router.push({ name: "login" });
+      this.$router.push({ name: "home" });
     },
   },
 };

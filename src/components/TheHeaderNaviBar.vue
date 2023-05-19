@@ -62,17 +62,14 @@ export default {
   data() {
     return {
       message: "",
-      isAdmin: false,
     };
-  },
-  mounted() {
-    if (this.userInfo != null) {
-      this.isAdmin = this.checkUserIsAdmin();
-    }
   },
   computed: {
     ...mapState(memberStore, ["isLogin", "userInfo"]),
     ...mapGetters(["checkUserInfo"]),
+    isAdmin() {
+      return this.checkUserIsAdmin();
+    },
   },
   methods: {
     ...mapActions(memberStore, ["userLogout"]),
