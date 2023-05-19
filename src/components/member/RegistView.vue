@@ -76,7 +76,7 @@
   </div>
 </template>
 <script>
-import { apiInstance } from "@/api/http.js";
+import { isPossibleId, regist } from "@/api/member";
 
 export default {
   name: "RegistView",
@@ -104,11 +104,11 @@ export default {
         alert("아이디를 확인해주세요");
         return;
       }
-      if (this.form.userPassword === this.form.checkPassword) {
+      if (this.form.userPassword != this.form.checkPassword) {
         alert("비밀번호를 확인해주세요");
         return;
       }
-      apiInstance.post(`/member/regist`, this.form).then(({ data }) => {
+      regist(this.form, ({ data }) => {
         if (data === "success") {
           alert("회원가입 완료");
           this.$router.push(`/login`);
@@ -133,7 +133,7 @@ export default {
         this.alertVariantId = "danger";
         this.showAlertId = true;
       } else {
-        apiInstance.get(`/member/${this.form.userId}`).then(({ data }) => {
+        isPossibleId(this.form.userId, ({ data }) => {
           if (data == 0) {
             this.alertVariantId = "primary";
             this.alertMessageId = "사용가능한 아이디 입니다.";

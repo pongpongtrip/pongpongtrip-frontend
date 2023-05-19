@@ -3,7 +3,7 @@
     <h2 class="mt-4">로그인</h2>
     <!--여기부터 새로 만들기-->
     <b-container>
-      <b-form @submit="confirm" @reset="onReset">
+      <b-form>
         <b-form-group>
           <b-form-checkbox
             class="mb-2 mr-sm-2 mb-sm-0"
