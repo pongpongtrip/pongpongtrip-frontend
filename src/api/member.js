@@ -36,4 +36,8 @@ async function update(user,success,fail) {
   await api.post(`member/update`, JSON.stringify(user)).then(success).catch(fail);
 }
 
-export { login, findById, tokenRegeneration, logout, isPossibleId, regist, isCorrectPwd, update };
+async function deleteMember (userid, success, fail) { 
+  await api.get(`member/delete`, userid).then(success).catch(fail);
+}
+
+export { login, findById, tokenRegeneration, logout, isPossibleId, regist, isCorrectPwd, update ,deleteMember};

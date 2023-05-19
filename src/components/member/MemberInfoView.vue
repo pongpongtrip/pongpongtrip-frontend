@@ -2,6 +2,12 @@
   <div class="memberinfo">
     <h2 class="mt-4">회원정보</h2>
     <b-container>
+      <b-modal v-model="showModalDel" title="😭탈퇴😭" @ok="onClickDel">
+        <p class="my-4">정말 탈퇴하시겠습니까? 😢</p>
+      </b-modal>
+      <b-modal v-model="showModalFin" title="확인😊" @ok="moveHome">
+        <p class="my-4">탈퇴완료</p>
+      </b-modal>
       <b-form @submit="onSubmit">
         <b-form-group id="user_id" label="사용자 아이디:" label-for="user_id">
           <b-form-input id="user_id" v-model="userInfo.userId" type="text" readonly> </b-form-input>
@@ -56,6 +62,7 @@
 </template>
 <script>
 import { mapState } from "vuex";
+import { deleteMember } from "@/api/member";
 
 const memberStore = "memberStore";
 
@@ -69,6 +76,8 @@ export default {
         userGrade: null,
         email: null,
       },
+      showModalDel: false,
+      showModalFin: false,
     };
   },
   mounted() {
@@ -94,7 +103,22 @@ export default {
   methods: {
     onSubmit(event) {
       event.preventDefault();
-      alert(JSON.stringify(this.form));
+      this.showModalDel = true;
+    },
+    onClickDel() {
+      //삭제 시 로직
+      //del flag 바꾸고
+      deleteMember(this.userInfo.userId, ({ data }) => {
+        console.log(data);
+        if (data === "success") {
+          //삭제완료 모달 띄우고 로그아웃 시키고 홈화면 이동
+          this.showModalFin = true;
+        }
+      });
+      //로그인 delflag 있으면 안되게
+    },
+    moveHome() {
+      this.$router.push({ name: "home" });
     },
   },
 };
