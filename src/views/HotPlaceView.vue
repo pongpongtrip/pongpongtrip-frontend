@@ -12,15 +12,27 @@
           img-top
           tag="article"
           style="max-width: 20rem"
-          class="mb-2"
+          class="mb-2 card"
         >
+        
           <b-card-text>{{ card.content }}</b-card-text>
-          <div @click="toggleIcon(card)">
-            <transition name="icon-fade" mode="out-in">
-              <b-icon :icon="card.currentIcon" :key="card.currentIcon"></b-icon>
-            </transition>
+          <div
+            class="icon-container"
+            :class="{ active: card.currentIcon === 'heart-fill' }"
+            @click="toggleIcon(card)"
+          >
+            <b-icon
+              :icon="card.currentIcon"
+              :color="card.iconColor"
+              class="heart-icon"
+            ></b-icon>
+            <b-icon
+              icon="heart-fill"
+              color="pink"
+              class="heart-fill-icon"
+            ></b-icon>
           </div>
-          <b-button href="#" variant="primary">Go somewhere</b-button>
+          <b-button href="#" variant="primary" class="go-button">Go somewhere</b-button>
         </b-card>
       </div>
     </b-container>
@@ -37,7 +49,7 @@ export default {
           imgSrc: "https://picsum.photos/600/300/?image=25",
           imgAlt: "Image",
           content:
-            "Some quick example text to build on the card title and make up the bulk of the card's content.",
+            "123",
           currentIcon: "heart",
         },
         {
@@ -119,23 +131,19 @@ export default {
       }
     },
     toggleIcon(card) {
-      card.currentIcon = card.currentIcon === "heart" ? "heart-fill" : "heart";
+      card.currentIcon = card.currentIcon === 'heart' ? 'heart-fill' : 'heart';
+      card.iconColor = card.currentIcon === 'heart-fill' ? 'pink' : 'black';
     },
+    // toggleIcon(card) {
+    //   card.currentIcon = card.currentIcon === "heart" ? "heart-fill" : "heart";
+    //   card.iconColor = card.currentIcon === "heart-fill" ? "red" : "";
+    // },
+
   },
 };
 </script>
 
 <style>
-.icon-fade-enter-active,
-.icon-fade-leave-active {
-  transition: opacity 0.5s;
-}
-
-.icon-fade-enter,
-.icon-fade-leave-to {
-  opacity: 0;
-}
-
 .card-row {
   display: flex;
   flex-wrap: wrap;
@@ -144,5 +152,64 @@ export default {
 .card {
   flex-basis: calc(33.33% - 1rem);
   margin: 0.5rem;
+}
+.card .card-text {
+  font-size: 14px;
+}
+
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 20%;
+  background-color: rgba(255, 255, 255, 0.9);
+  z-index: 1;
+}
+
+.icon-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.icon-container .heart-icon {
+  font-size: 22px;
+  transition: color 0.3s ease-out;
+}
+
+.icon-container .heart-fill-icon {
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  font-size: 30px;
+  transform: scale(0);
+  transition: transform 0.3s ease-out;
+}
+
+.icon-container.active .heart-icon {
+  color: transparent;
+}
+
+.icon-container.active .heart-fill-icon {
+  transform: scale(1);
+}
+
+.card-content {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 10px;
+}
+
+.card-text {
+  margin-bottom: 1rem;
+}
+
+.go-button {
+  z-index: 1;
 }
 </style>
