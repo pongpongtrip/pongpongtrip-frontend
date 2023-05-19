@@ -29,7 +29,9 @@
               <!-- <em>User</em> -->
             </template>
             <b-dropdown-item to="/memberinfo"> 회원정보</b-dropdown-item>
-            <b-dropdown-item to="/memberlist" v-if="isAdmin"> 회원관리</b-dropdown-item>
+            <b-dropdown-item to="/memberlist" v-if="isAdmin" v-model="isAdmin">
+              회원관리</b-dropdown-item
+            >
             <b-dropdown-item @click.prevent="onClickLogout"> 로그아웃</b-dropdown-item>
           </b-nav-item-dropdown>
 

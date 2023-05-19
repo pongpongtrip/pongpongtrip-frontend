@@ -20,4 +20,12 @@ async function logout(userid, success, fail) {
   await api.get(`/member/logout/${userid}`).then(success).catch(fail);
 }
 
-export { login, findById, tokenRegeneration, logout };
+async function isPossibleId(userId,success,fail) {
+  await api.get(`/member/${userId}`).then(success).catch(fail);
+}
+
+async function regist(user,success,fail) {
+  await api.post(`/member/regist`,user).then(success).catch(fail);
+}
+
+export { login, findById, tokenRegeneration, logout, isPossibleId, regist };
