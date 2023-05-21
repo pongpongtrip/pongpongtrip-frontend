@@ -40,6 +40,10 @@ async function deleteMember(userid, success, fail) {
 	await api.get(`member/delete/${userid}`).then(success).catch(fail);
 }
 
+async function userlist(success, fail) {
+	await api.get(`admin/user/list`).then(success).catch(fail);
+}
+
 export {
 	login,
 	findById,
@@ -50,4 +54,5 @@ export {
 	isCorrectPwd,
 	update,
 	deleteMember,
+	userlist,
 };
