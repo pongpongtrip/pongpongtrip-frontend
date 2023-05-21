@@ -1,5 +1,36 @@
 <template>
 	<div class="myplan">
+		<b-sidebar id="sidebar-1" title="1day Trip Plan" shadow v-model="showSidebar">
+			<div class="px-3 py-2">
+				<b-list-group>
+					<b-form @submit="onSubmitMyPlan">
+						<b-list-group-item v-for="(item, index) in myPlanItems" :key="index">
+							<!-- 내용 출력 -->
+							<b-form-group>
+								<b-form-timepicker
+									v-model="timeValues[index]"
+									size="sm"
+									locale="en"
+									placeholder="Select time"
+									required
+								></b-form-timepicker>
+							</b-form-group>
+							<div class="m-2">
+								{{ item.title }}
+							</div>
+							<div style="text-align: end">
+								<b-button size="sm" variant="outline-danger" @click="removeMyPlan(item)"
+									>삭제</b-button
+								>
+							</div>
+						</b-list-group-item>
+					</b-form>
+				</b-list-group>
+				<b-button class="m-2" type="submit" variant="primary" block @click="onSubmitMyPlan"
+					>일정 등록</b-button
+				>
+			</div>
+		</b-sidebar>
 		<b-container>
 			<h2 class="mt-4">나만의 여행 계획</h2>
 			<!--form  start-->
@@ -30,14 +61,15 @@
 						required
 					></b-form-input>
 				</b-form-group>
-				<b-button type="submit" variant="primary">검색</b-button>
+				<b-button type="submit" variant="primary" class="mb-2 mr-sm-2 mb-sm-0">검색</b-button>
+				<b-button variant="secondary" v-b-toggle.sidebar-1>일정</b-button>
 			</b-form>
 			<!--form  end-->
 
 			<div class="row w-100 mt-4">
 				<!-- kakao map start -->
 				<div style="width: 700px; height: 700px">
-					<KaKaoMap :markerItems="this.markers"/>
+					<KaKaoMap :markerItems="this.markers" />
 				</div>
 				<!-- kakao map end -->
 				<div class="col">
@@ -50,7 +82,7 @@
 </template>
 
 <script>
-import http from "@/api/httpDefault.js";
+import http from '@/api/httpDefault.js';
 import PlanItems from '@/components/PlanItems.vue';
 import KaKaoMap from '@/components/KaKaoMap.vue';
 
@@ -100,31 +132,37 @@ export default {
 				{ text: '쇼핑', value: 38 },
 				{ text: '음식점', value: 39 },
 			],
+			timeValues: [],
+			showSidebar: false,
 		};
+	},
+	computed: {
+		myPlanItems() {
+			console.log(this.$store.state.MY_PLAN);
+			this.openSidebar();
+			return this.$store.state.MY_PLAN;
+		},
 	},
 	methods: {
 		onSubmit(event) {
 			event.preventDefault();
 			alert(JSON.stringify(this.form));
-			http
-				.post(`/attraction/search`, JSON.stringify(this.form))
-				.then((response) => {
-					console.log(response.data);
+			http.post(`/attraction/search`, JSON.stringify(this.form)).then((response) => {
+				console.log(response.data);
 
-					// 받아온 데이터를 가공하여 tripItems에 할당
-					this.tripItems = response.data;
-					let marks = [];
+				// 받아온 데이터를 가공하여 tripItems에 할당
+				this.tripItems = response.data;
+				let marks = [];
 
-					for (let i = 0; i < response.data.length; i++) {
-						let a = response.data[i].latitude;
-						let b = response.data[i].longitude;
-						this.markers.push([a, b]);
-					}
-					
-					// 받아온 데이터를 가공하여 tripItems에 할당
-					this.planItems = response.data;
-					console.log(this.planItems);
-				});
+				for (let i = 0; i < response.data.length; i++) {
+					let a = response.data[i].latitude;
+					let b = response.data[i].longitude;
+					this.markers.push([a, b]);
+				}
+
+				// 받아온 데이터를 가공하여 tripItems에 할당
+				this.planItems = response.data;
+			});
 		},
 		onReset(event) {
 			event.preventDefault();
@@ -132,6 +170,36 @@ export default {
 			this.form.sido_code = 0;
 			this.form.content_type_id = 0;
 			this.form.search_keyword = '';
+		},
+		removeMyPlan(item) {
+			const index = this.$store.state.MY_PLAN.indexOf(item);
+			console.log(index);
+			this.$store.commit('removeMyPlan', index);
+		},
+		onSubmitMyPlan(event) {
+			event.preventDefault();
+
+			// Get the timepicker values from the timeValues array
+			const timepickerValues = this.timeValues.map((time) => (time ? time.toString() : ''));
+
+			// Include the timeValues in your API call or further processing
+			const myPlanData = {
+				myPlan: this.$store.state.MY_PLAN,
+				timeValues: timepickerValues,
+			};
+
+			console.log(myPlanData);
+
+			// http.post('/', JSON.stringify(myPlanData)).then((response) => {
+			// 	// back으로 데이터 보내는 부분 작성
+			// });
+		},
+		getTimepickerValue(contentId) {
+			const timepicker = this.$refs[`timepicker_${contentId}`][0];
+			return timepicker ? timepicker.value : null;
+		},
+		openSidebar() {
+			this.showSidebar = true;
 		},
 	},
 };
