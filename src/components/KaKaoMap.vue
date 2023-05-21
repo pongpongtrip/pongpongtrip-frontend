@@ -11,7 +11,7 @@
 				<!-- <button @click="displayMarker(markerPositions1)">marker set 1</button> -->
 				<!-- <button @click="displayMarker(markerPositions2)">marker set 2</button>
 				<button @click="displayMarker([])">marker set 3 (empty)</button> -->
-				<button @click="displayInfoWindow">infowindow</button>
+				<!-- <button @click="displayInfoWindow">infowindow</button> -->
 				
 				<!-- <div class="row">
           <table class="table table-striped" style="display: none">
@@ -40,7 +40,7 @@ export default {
 	name: 'MapView',
 	props: {
 		markerItems: {
-			type:Array
+			type: Array,
 		}
 	}
 		
@@ -68,8 +68,10 @@ export default {
 
 	mounted() {
 		console.log('sdfsdfsd');
+		console.log(this.markerItems);
 		if (window.kakao && window.kakao.maps) {
-			this.initMap();
+			
+			setTimeout(() => { this.initMap() }, 100)
 			console.log('카카오 맵 초기화');
 		} else {
 			const script = document.createElement('script');
@@ -98,6 +100,7 @@ export default {
 			//지도 객체를 등록합니다.
 			//지도 객체는 반응형 관리 대상이 아니므로 initMap에서 선언합니다.
 			this.map = new kakao.maps.Map(container, options);
+			this.displayMarker();
 		},
 		changeSize(size) {
 			const container = document.getElementById('map');
