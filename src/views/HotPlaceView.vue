@@ -62,30 +62,41 @@
               class="heart-fill-icon"
             ></b-icon>
           </div>
-          <b-button @click="openModal" variant="primary" class="go-button">자세히 보기</b-button>
-          <div :class="{'custom-overlay': modalVisible}">
-            <ModalComponent :modalVisible="modalVisible" @close-modal="closeModal" />
-          </div>
+          <b-button @click="openModal(card, index)" variant="primary" class="go-button">자세히 보기</b-button>
+          
         </b-card>
       </div>
+      <b-modal v-model="modalOpen" @hidden="closeModal" size="lg" dialog-class="custom-modal">
+        <template #modal-title>{{ selectedCard.title }}</template>
+        <template #default>
+          <img :src="selectedCard.first_image" :alt="selectedCard.imgAlt" style="max-width: 100%">
+          <p>주소: {{ selectedCard.addr1 }}</p>
+          <p>전화번호: {{ selectedCard.telname }}</p>
+          <p>{{ selectedCard.overview }}</p>
+          <KaKaoMap ref="kakaoMap" :marker-items="markers"/>
+        </template>
+      </b-modal>
     </b-container>
+    
   </div>
 </template>
 
 <script>
 import http from "@/api/httpDefault.js";
 import Vue from 'vue';
-import ModalComponent from '@/components/AttractionModal.vue'
+import KaKaoMap from "@/components/KaKaoMap.vue";
 
 export default {
   components: {
-    ModalComponent,
+    KaKaoMap,
   },
   data() {
     return {
       visibleCount: 9,
       visibleCards: [],
-      modalVisible: false,
+      modalOpen: false,
+      selectedCard: null,
+      // markers: [],
       form: {
 				sido_code: 0,
 				content_type_id: 0,
@@ -144,9 +155,9 @@ export default {
         this.cards.forEach(item => {
           if (item.first_image === ""){
             console.log("이미지 없음");
-            item.first_image = "https://picsum.photos/600/300/?image=25";
+            item.first_image = require("../assets/logo1.png");
           }
-          item.imgAlt = "https://picsum.photos/600/300/?image=25";
+          item.imgAlt = require("../assets/logo1.png");
           item.currentIcon = "heart";
         });
 
@@ -230,9 +241,9 @@ export default {
           this.cards.forEach(item => {
             if (item.first_image === ""){
               console.log("이미지 없음");
-              item.first_image = "https://picsum.photos/600/300/?image=25";
+              item.first_image = require("../assets/logo1.png");
             }
-            item.imgAlt = "https://picsum.photos/600/300/?image=25";
+            item.imgAlt = require("../assets/logo1.png");
             item.currentIcon = "heart";
           });
 
@@ -240,13 +251,28 @@ export default {
           this.updateVisibleCards();
 				});
 		},
-    openModal() {
-      this.modalVisible = true;
-      document.body.classList.add("modal-open"); // 흐림 효과를 위한 클래스 추가
+
+    openModal(card, index) {
+      console.log(card);
+      this.selectedCard = card;
+      
+      this.modalOpen = true;
+      this.markers = [[card.latitude, card.longitude ]];
+      console.log(this.markers);
+      
+      console.log("선택한 카드 인덱스:", index);
+      
     },
+
     closeModal() {
-      this.modalVisible = false;
-      document.body.classList.remove("modal-open"); // 흐림 효과를 위한 클래스 제거
+      this.modalOpen = false;
+      this.markers = [];
+      this.selectedCard = null;
+      const kakaoMapComponent = this.$refs.kakaoMap;
+      if (kakaoMapComponent) {
+        // kakaoMapComponent을 사용하여 초기화 작업 수행
+        kakaoMapComponent.init();
+      }
     },
 
   },
@@ -330,9 +356,6 @@ export default {
   z-index: 1;
 }
 
-.modal-open {
-  /* 흐림 효과 스타일 설정 */
-  backdrop-filter: blur(10px);
-  background-color: rgba(0, 0, 0, 0.6);
-}
+
+
 </style>
