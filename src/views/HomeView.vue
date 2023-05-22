@@ -14,33 +14,27 @@
       @sliding-end="onSlideEnd"
     >
       <b-carousel-slide>
+        <!-- img : 3480x1200 -->
         <template #img>
-          <img
-            class="d-block img-fluid w-100 ignore-aspect-ratio"
-            src="@/assets/main_picture_1.jpg"
-            alt="image slot"
-          />
-        </template>
-        <div class="slide-overlay">
-          <h1 class="slide-text mb-4">PONG PONG</h1>
-        </div>
-      </b-carousel-slide>
-      <b-carousel-slide>
-        <template #img>
-          <img class="d-block img-fluid w-100" src="@/assets/main_picture_2.jpg" alt="image slot" />
+          <img class="d-block img-fluid w-100" src="@/assets/main_pic1.jpg" alt="image slot" />
         </template>
       </b-carousel-slide>
       <b-carousel-slide>
         <template #img>
-          <img class="d-block img-fluid w-100" src="@/assets/main_picture_3.jpg" alt="image slot" />
+          <img class="d-block img-fluid w-100" src="@/assets/main_pic2.jpg" alt="image slot" />
         </template>
       </b-carousel-slide>
       <b-carousel-slide>
         <template #img>
-          <img class="d-block img-fluid w-100" src="@/assets/main_picture_4.jpg" alt="image slot" />
+          <img class="d-block img-fluid w-100" src="@/assets/main_pic3.jpg" alt="image slot" />
         </template>
       </b-carousel-slide>
     </b-carousel>
+    <div class="pongpong">
+      <h1 id="main_title">YOUR TRIP OF JOY</h1>
+      <h5 id="main_content">퐁퐁트립과 함께 세상의 모든 즐거움을 찾아보세요</h5>
+      <b-button id="main_button" variant="primary" to="/hotplace">둘러보기</b-button>
+    </div>
 
     <!-- 전국 베스트 숙소 start -->
     <div class="container">
@@ -246,58 +240,69 @@ export default {
     };
   },
   async created() {
-    
-      console.log("Created in??")
-      const serviceKey = "T%2FAhyTaE0rj803LnvkkF61K45eKKUhlcmpHuGSwflWQGhTM%2BF9fvx%2By%2BlRXOf2b8VQQOPjConQOOrw%2F47eNkxg%3D%3D";
-      // index page 로딩 후 전국의 시도 설정.
-      let areaUrl =
-        "https://apis.data.go.kr/B551011/KorService1/areaCode1?serviceKey=" +
-        serviceKey +
-        "&numOfRows=20&pageNo=1&MobileOS=ETC&MobileApp=AppTest&_type=json";
+    console.log("Created in??");
+    const serviceKey =
+      "T%2FAhyTaE0rj803LnvkkF61K45eKKUhlcmpHuGSwflWQGhTM%2BF9fvx%2By%2BlRXOf2b8VQQOPjConQOOrw%2F47eNkxg%3D%3D";
+    // index page 로딩 후 전국의 시도 설정.
+    let areaUrl =
+      "https://apis.data.go.kr/B551011/KorService1/areaCode1?serviceKey=" +
+      serviceKey +
+      "&numOfRows=20&pageNo=1&MobileOS=ETC&MobileApp=AppTest&_type=json";
 
+    let searchUrl = `https://apis.data.go.kr/B551011/KorService1/searchKeyword1?serviceKey=${serviceKey}&numOfRows=50&pageNo=1&MobileOS=ETC&MobileApp=AppTest&_type=json&listYN=Y&arrange=A`;
+    let areaCode = 1;
+    let contentTypeId = 32;
+    let search = ["호텔"];
+    let keyword = search[0];
+    // let keyword = search[Math.floor(Math.random() * 4)];
 
-      let searchUrl = `https://apis.data.go.kr/B551011/KorService1/searchKeyword1?serviceKey=${serviceKey}&numOfRows=50&pageNo=1&MobileOS=ETC&MobileApp=AppTest&_type=json&listYN=Y&arrange=A`;
-      let areaCode = 1;
-      let contentTypeId = 32;
-      let search = ["호텔"];
-      let keyword = search[0];
-      // let keyword = search[Math.floor(Math.random() * 4)];
+    if (parseInt(areaCode)) searchUrl += `&areaCode=${areaCode}`;
+    if (parseInt(contentTypeId)) searchUrl += `&contentTypeId=${contentTypeId}`;
+    searchUrl += `&keyword=${keyword}`;
 
-      if (parseInt(areaCode)) searchUrl += `&areaCode=${areaCode}`;
-      if (parseInt(contentTypeId)) searchUrl += `&contentTypeId=${contentTypeId}`;
-      searchUrl += `&keyword=${keyword}`;
+    await fetch(searchUrl)
+      .then((response) => {
+        return response.json();
+      })
+      .then(
+        ({
+          response: {
+            body: {
+              items: { item },
+            },
+          },
+        }) => {
+          this.makeList(item);
+        }
+      );
 
+    let searchUrl2 = `https://apis.data.go.kr/B551011/KorService1/searchKeyword1?serviceKey=${serviceKey}&numOfRows=50&pageNo=1&MobileOS=ETC&MobileApp=AppTest&_type=json&listYN=Y&arrange=A`;
+    let areaCode2 = 0;
+    let contentTypeId2 = 15;
+    let search2 = ["축"];
+    let keyword2 = search2[0];
 
+    if (parseInt(areaCode2)) searchUrl2 += `&areaCode=${areaCode2}`;
+    if (parseInt(contentTypeId2)) searchUrl2 += `&contentTypeId=${contentTypeId2}`;
+    searchUrl2 += `&keyword=${keyword2}`;
 
-      await fetch(searchUrl)
-        .then((response) => {
-          return response.json();
-        })
-        .then(({ response: { body: { items: { item } } } }) => {
-          this.makeList(item)
-        });
-        
-      let searchUrl2 = `https://apis.data.go.kr/B551011/KorService1/searchKeyword1?serviceKey=${serviceKey}&numOfRows=50&pageNo=1&MobileOS=ETC&MobileApp=AppTest&_type=json&listYN=Y&arrange=A`;
-      let areaCode2 = 0;
-      let contentTypeId2 = 15;
-      let search2 = ["축"];
-      let keyword2 = search2[0];
-
-      if (parseInt(areaCode2)) searchUrl2 += `&areaCode=${areaCode2}`;
-      if (parseInt(contentTypeId2)) searchUrl2 += `&contentTypeId=${contentTypeId2}`;
-      searchUrl2 += `&keyword=${keyword2}`;
-        
-      await fetch(searchUrl2)
-          .then((response) => {
-            // response.json(); 
-            // console.log(response)
-            return response.json();
-          })
-          .then(({ response: { body: { items: { item } } } }) => {
-            this.makeList2(item)
-          });
-      
-
+    await fetch(searchUrl2)
+      .then((response) => {
+        // response.json();
+        // console.log(response)
+        return response.json();
+      })
+      .then(
+        ({
+          response: {
+            body: {
+              items: { item },
+            },
+          },
+        }) => {
+          this.makeList2(item);
+        }
+      );
   },
   computed: {
     paginatedCards_hotel() {
@@ -339,7 +344,7 @@ export default {
     // 화면의 card 이미지 삽입
     makeList: function (data) {
       let trips = data;
-      
+
       console.log(data);
       let tripList = ``;
       let nameList = ``;
@@ -352,7 +357,7 @@ export default {
         if (area.firstimage === "") {
           continue;
         }
-        
+
         this.cards_hotel[cnt].image = area.firstimage;
         this.cards_hotel[cnt].title = area.title;
         this.cards_hotel[cnt].description = area.addr1;
@@ -362,21 +367,18 @@ export default {
           break;
         }
       }
-
-
     },
 
     makeList2: function (data) {
-      console.log("들오니")
+      console.log("들오니");
       let trips = data;
       console.log(trips);
-      
+
       let tripList = ``;
       let nameList = ``;
       let positions = [];
       let cnt = 0;
 
-    
       for (var i = 0; i < 50; i++) {
         var area = trips[i];
         console.log(area.firstimage);
@@ -384,7 +386,7 @@ export default {
           console.log("skip");
           continue;
         }
-        
+
         this.cards_attraction[cnt].image = area.firstimage;
         this.cards_attraction[cnt].title = area.title;
         this.cards_attraction[cnt].description = area.addr1;
@@ -394,16 +396,15 @@ export default {
           break;
         }
       }
-    }
-  }
-}
-  
+    },
+  },
+};
 </script>
 
 <style scoped>
-.d-block {
+/* .d-block {
   opacity: 50%;
-}
+} */
 
 .slide-text {
   color: white;
@@ -416,7 +417,7 @@ export default {
 }
 
 .card-img-top {
-  width:100%;
+  width: 100%;
   height: 60%;
   object-fit: contain;
 }
@@ -440,5 +441,25 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.pongpong {
+  z-index: 100;
+  position: relative;
+  bottom: 15em;
+  margin: 0 20%;
+  text-align: start;
+}
+
+#main_title {
+  font-weight: bold;
+  color: white;
+}
+
+#main_content {
+  color: white;
+}
+
+#main_button {
 }
 </style>
