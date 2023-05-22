@@ -219,9 +219,31 @@ export default {
       if (card.currentIcon === 'heart') {
         Vue.set(card, 'currentIcon', 'heart-fill');
         Vue.set(card, 'iconColor', 'pink');
+        console.log(this.$store.state.memberStore.userInfo.userId);
+        console.log(card.content_id);
+        console.log("좋아요 등록");
+        http
+          .post("/attraction/like", JSON.stringify({
+            user_id: this.$store.state.memberStore.userInfo.userId,
+            content_id: card.content_id,
+          }))
+          .then((response) => {
+            console.log(response.data);
+          })
       } else {
         Vue.set(card, 'currentIcon', 'heart');
         Vue.set(card, 'iconColor', 'black');
+        console.log(card);
+        console.log("좋아요 해제");
+
+        http
+          .post("/attraction/dislike", JSON.stringify({
+            user_id: this.$store.state.memberStore.userInfo.userId,
+            content_id: card.content_id,
+          }))
+          .then((response) => {
+            console.log(response.data);
+          })
       }
     },
 
