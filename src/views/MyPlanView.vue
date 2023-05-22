@@ -1,6 +1,7 @@
 <template>
 	<div class="myplan">
-		<b-sidebar id="sidebar-1" title="1day Trip Plan" shadow v-model="showSidebar">
+		
+		<b-sidebar id="sidebar-1" title="1day Trip Plan" shadow v-model="showSidebar" class="sidebar">
 			<div class="px-3 py-2">
 				<b-list-group>
 					<b-form @submit="onSubmitMyPlan">
@@ -31,6 +32,7 @@
 				>
 			</div>
 		</b-sidebar>
+		
 		<b-container>
 			<h2 class="mt-4">나만의 여행 계획</h2>
 			<!--form  start-->
@@ -204,3 +206,6 @@ export default {
 	},
 };
 </script>
+<style>
+
+</style>

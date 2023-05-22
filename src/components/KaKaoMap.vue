@@ -71,7 +71,7 @@ export default {
 		console.log(this.markerItems);
 		if (window.kakao && window.kakao.maps) {
 			
-			setTimeout(() => { this.initMap() }, 100)
+			setTimeout(() => { this.initMap() }, 10)
 			console.log('카카오 맵 초기화');
 		} else {
 			const script = document.createElement('script');
