@@ -32,6 +32,7 @@
             <b-dropdown-item to="/memberlist" v-if="isAdmin" v-model="isAdmin">
               회원관리</b-dropdown-item
             >
+            <b-dropdown-item to="/mypage"> 마이페이지 </b-dropdown-item>
             <b-dropdown-item @click.prevent="onClickLogout"> 로그아웃</b-dropdown-item>
           </b-nav-item-dropdown>
 
@@ -97,5 +98,6 @@ export default {
 <style>
 .custom-navbar {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
 }
 </style>
