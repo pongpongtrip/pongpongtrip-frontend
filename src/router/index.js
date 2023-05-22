@@ -8,6 +8,7 @@ import TripBoardView from '@/views/TripBoardView.vue';
 import LoginView from '@/components/member/LoginView.vue';
 import MemberInfoView from '@/components/member/MemberInfoView.vue';
 import RegistView from '@/components/member/RegistView.vue';
+import MypageView from '@/components/member/MypageView.vue';
 import MemberUpdateView from '@/components/member/MemberUpdateView.vue';
 import MemberList from '@/components/admin/MemberList.vue';
 import TripBoardWrite from '@/views/TripBoardWrite.vue';
@@ -108,6 +109,11 @@ const routes = [
 		path: '/regist',
 		name: 'regist',
 		component: RegistView,
+	},
+	{
+		path: '/mypage',
+		name: 'mypage',
+		component: MypageView,
 	},
 ];
 
