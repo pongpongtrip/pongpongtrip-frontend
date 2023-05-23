@@ -73,6 +73,7 @@ const routes = [
 		path: '/tripboard/write',
 		name: 'boardwrite',
 		component: TripBoardWrite,
+		props: true,
 	},
 	{
 		path: '/tripboard/detail',
