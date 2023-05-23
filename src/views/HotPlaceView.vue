@@ -3,35 +3,35 @@
     <h2 class="mt-4">핫 플레이스</h2>
     <b-container>
       <b-form inline class="justify-content-md-center" @submit="onSubmit">
-				<b-form-group id="search-area" class="mb-2 mr-sm-2 mb-sm-0">
-					<b-form-select
-						id="search-area"
-						v-model="form.sido_code"
-						:options="sido_codes"
-						required
-					></b-form-select>
-				</b-form-group>
+        <b-form-group id="search-area" class="mb-2 mr-sm-2 mb-sm-0">
+          <b-form-select
+            id="search-area"
+            v-model="form.sido_code"
+            :options="sido_codes"
+            required
+          ></b-form-select>
+        </b-form-group>
 
-				<b-form-group id="search-content-id" class="mb-2 mr-sm-2 mb-sm-0">
-					<b-form-select
-						id="search-content-id"
-						v-model="form.content_type_id"
-						:options="content_type_ids"
-						required
-					></b-form-select>
-				</b-form-group>
+        <b-form-group id="search-content-id" class="mb-2 mr-sm-2 mb-sm-0">
+          <b-form-select
+            id="search-content-id"
+            v-model="form.content_type_id"
+            :options="content_type_ids"
+            required
+          ></b-form-select>
+        </b-form-group>
 
         <b-form-group id="search-keyword" class="mb-2 mr-sm-2 mb-sm-0">
-					<b-form-input
-						id="search-keyword"
-						v-model="form.search_keyword"
-						type="search"
-						placeholder="검색어"
-						required
-					></b-form-input>
-				</b-form-group>
-				<b-button type="submit" variant="primary">검색</b-button>
-			</b-form>
+          <b-form-input
+            id="search-keyword"
+            v-model="form.search_keyword"
+            type="search"
+            placeholder="검색어"
+            required
+          ></b-form-input>
+        </b-form-group>
+        <b-button type="submit" variant="primary">검색</b-button>
+      </b-form>
       <div class="card-row">
         <b-card
           v-for="(card, index) in visibleCards"
@@ -44,52 +44,54 @@
           style="max-width: 20rem"
           class="mb-2 card"
         >
-        
           <b-card-text>{{ card.addr1 }}</b-card-text>
           <div
             class="icon-container"
             :class="{ active: card.currentIcon === 'heart-fill' }"
             @click="toggleIcon(card)"
           >
-            <b-icon
-              :icon="card.currentIcon"
-              :color="card.iconColor"
-              class="heart-icon"
-            ></b-icon>
-            <b-icon
-              icon="heart-fill"
-              color="pink"
-              class="heart-fill-icon"
-            ></b-icon>
+            <b-icon :icon="card.currentIcon" :color="card.iconColor" class="heart-icon"></b-icon>
+            <b-icon icon="heart-fill" color="pink" class="heart-fill-icon"></b-icon>
           </div>
-          <b-button @click="openModal(card, index)" variant="primary" class="go-button">자세히 보기</b-button>
-          
+          <b-button @click="openModal(card, index)" variant="primary" class="go-button"
+            >자세히 보기</b-button
+          >
         </b-card>
       </div>
-      <b-modal v-model="modalOpen" @hidden="closeModal" size="lg" dialog-class="custom-modal">
-        <template #modal-title>{{ selectedCard.title }}</template>
+      <b-modal
+        v-model="modalOpen"
+        @hidden="closeModal"
+        size="xl"
+        dialog-class="hotplace_custom-modal"
+      >
+        <template #modal-title>
+          <h5 class="hotplace_modal-title">{{ selectedCard.title }}</h5></template
+        >
         <template #default>
-          <img :src="selectedCard.first_image" :alt="selectedCard.imgAlt" style="max-width: 100%">
-          <p>주소: {{ selectedCard.addr1 }}</p>
-          <p>전화번호: {{ selectedCard.telname }}</p>
-          <p>{{ selectedCard.overview }}</p>
-          <KaKaoMap ref="kakaoMap" :marker-items="markers"/>
+          <div class="hotplace_card">
+            <img
+              :src="selectedCard.first_image"
+              :alt="selectedCard.imgAlt"
+              style="max-width: 100%"
+              class="hotplace_card-img-top"
+            />
+            <p class="hotplace_card-text">주소: {{ selectedCard.addr1 }}</p>
+            <p class="hotplace_card-text">전화번호: {{ selectedCard.telname }}</p>
+            <p class="hotplace_card-text">{{ selectedCard.overview }}</p>
+          </div>
+          <KaKaoMap ref="kakaoMap" :marker-items="markers" />
         </template>
       </b-modal>
-      
     </b-container>
-    
     <div class="spinner-container" v-if="loading">
       <b-spinner variant="primary" label="Spinning"></b-spinner>
     </div>
-    
   </div>
-  
 </template>
 
 <script>
 import http from "@/api/httpDefault.js";
-import Vue from 'vue';
+import Vue from "vue";
 import KaKaoMap from "@/components/KaKaoMap.vue";
 
 export default {
@@ -98,7 +100,7 @@ export default {
   },
   data() {
     return {
-      loading: true, 
+      loading: true,
 
       visibleCount: 9,
       visibleCards: [],
@@ -107,41 +109,41 @@ export default {
       selectedCard: null,
       // markers: [],
       form: {
-				sido_code: 0,
-				content_type_id: 0,
-        search_keyword: '',
-			},
-			sido_codes: [
-				{ text: '검색 할 지역 선택', value: 0 },
-				{ text: '서울', value: 1 },
-				{ text: '인천', value: 2 },
-				{ text: '대전', value: 3 },
-				{ text: '대구', value: 4 },
-				{ text: '광주', value: 5 },
-				{ text: '부산', value: 6 },
-				{ text: '울산', value: 7 },
-				{ text: '세종특별자치시', value: 8 },
-				{ text: '경기도', value: 31 },
-				{ text: '강원도', value: 32 },
-				{ text: '충청북도', value: 33 },
-				{ text: '충청남도', value: 34 },
-				{ text: '경상북도', value: 35 },
-				{ text: '경상남도', value: 36 },
-				{ text: '전라북도', value: 37 },
-				{ text: '전라남도', value: 38 },
-				{ text: '제주도', value: 39 },
-			],
-			content_type_ids: [
-				{ text: '관광지 유형', value: 0 },
-				{ text: '관광지', value: 12 },
-				{ text: '문화시설', value: 14 },
-				{ text: '축제공연행사', value: 15 },
-				{ text: '여행코스', value: 25 },
-				{ text: '레포츠', value: 28 },
-				{ text: '숙박', value: 32 },
-				{ text: '쇼핑', value: 38 },
-				{ text: '음식점', value: 39 },
-			],
+        sido_code: 0,
+        content_type_id: 0,
+        search_keyword: "",
+      },
+      sido_codes: [
+        { text: "검색 할 지역 선택", value: 0 },
+        { text: "서울", value: 1 },
+        { text: "인천", value: 2 },
+        { text: "대전", value: 3 },
+        { text: "대구", value: 4 },
+        { text: "광주", value: 5 },
+        { text: "부산", value: 6 },
+        { text: "울산", value: 7 },
+        { text: "세종특별자치시", value: 8 },
+        { text: "경기도", value: 31 },
+        { text: "강원도", value: 32 },
+        { text: "충청북도", value: 33 },
+        { text: "충청남도", value: 34 },
+        { text: "경상북도", value: 35 },
+        { text: "경상남도", value: 36 },
+        { text: "전라북도", value: 37 },
+        { text: "전라남도", value: 38 },
+        { text: "제주도", value: 39 },
+      ],
+      content_type_ids: [
+        { text: "관광지 유형", value: 0 },
+        { text: "관광지", value: 12 },
+        { text: "문화시설", value: 14 },
+        { text: "축제공연행사", value: 15 },
+        { text: "여행코스", value: 25 },
+        { text: "레포츠", value: 28 },
+        { text: "숙박", value: 32 },
+        { text: "쇼핑", value: 38 },
+        { text: "음식점", value: 39 },
+      ],
       cards: [
         // {
         //   title: "Card Title 1",
@@ -151,31 +153,26 @@ export default {
         //     "123",
         //   currentIcon: "heart",
         // },
-        
       ],
     };
   },
   created() {
-    http
-      .post("/attraction/hotplace")
-      .then((response) => {
-        this.cards = response.data;
-        
-        this.cards.forEach(item => {
-          if (item.first_image === ""){
-            console.log("이미지 없음");
-            item.first_image = require("../assets/logo1.png");
-          }
-          item.imgAlt = require("../assets/logo1.png");
-          item.currentIcon = "heart";
-        });
+    http.post("/attraction/hotplace").then((response) => {
+      this.cards = response.data;
 
-
-        this.updateVisibleCards();
-        this.loading = false;
+      this.cards.forEach((item) => {
+        if (item.first_image === "") {
+          console.log("이미지 없음");
+          item.first_image = require("../assets/logo1.png");
+        }
+        item.imgAlt = require("../assets/logo1.png");
+        item.currentIcon = "heart";
       });
 
-},
+      this.updateVisibleCards();
+      this.loading = false;
+    });
+  },
 
   mounted() {
     // this.arrangeCards();
@@ -195,7 +192,6 @@ export default {
           const rowIndex = Math.floor(index / 3);
           card.style.order = rowIndex;
         });
-      
       }
     },
     updateVisibleCards() {
@@ -204,7 +200,7 @@ export default {
     },
     loadMoreCards() {
       console.log("scroll");
-      console.log(this.visibleCards.length  )
+      console.log(this.visibleCards.length);
       const windowScrollY = window.scrollY || window.pageYOffset;
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
@@ -226,74 +222,76 @@ export default {
       // card.currentIcon = card.currentIcon === 'heart' ? 'heart-fill' : 'heart';
       // card.iconColor = card.currentIcon === 'heart-fill' ? 'pink' : 'black';
       // this.$forceUpdate();
-      if (card.currentIcon === 'heart') {
-        Vue.set(card, 'currentIcon', 'heart-fill');
-        Vue.set(card, 'iconColor', 'pink');
+      if (card.currentIcon === "heart") {
+        Vue.set(card, "currentIcon", "heart-fill");
+        Vue.set(card, "iconColor", "pink");
         console.log(this.$store.state.memberStore.userInfo.userId);
         console.log(card.content_id);
         console.log("좋아요 등록");
         http
-          .post("/attraction/like", JSON.stringify({
-            user_id: this.$store.state.memberStore.userInfo.userId,
-            content_id: card.content_id,
-          }))
+          .post(
+            "/attraction/like",
+            JSON.stringify({
+              user_id: this.$store.state.memberStore.userInfo.userId,
+              content_id: card.content_id,
+            })
+          )
           .then((response) => {
             console.log(response.data);
-          })
+          });
       } else {
-        Vue.set(card, 'currentIcon', 'heart');
-        Vue.set(card, 'iconColor', 'black');
+        Vue.set(card, "currentIcon", "heart");
+        Vue.set(card, "iconColor", "black");
         console.log(card);
         console.log("좋아요 해제");
 
         http
-          .post("/attraction/dislike", JSON.stringify({
-            user_id: this.$store.state.memberStore.userInfo.userId,
-            content_id: card.content_id,
-          }))
+          .post(
+            "/attraction/dislike",
+            JSON.stringify({
+              user_id: this.$store.state.memberStore.userInfo.userId,
+              content_id: card.content_id,
+            })
+          )
           .then((response) => {
             console.log(response.data);
-          })
+          });
       }
     },
 
     onSubmit(event) {
-			event.preventDefault();
-			alert(JSON.stringify(this.form));
-			http
-				.post(`/attraction/hotplace/search`, JSON.stringify(this.form))
-				.then((response) => {
-					console.log(response.data);
+      event.preventDefault();
+      alert(JSON.stringify(this.form));
+      http.post(`/attraction/hotplace/search`, JSON.stringify(this.form)).then((response) => {
+        console.log(response.data);
 
-					// 받아온 데이터를 가공하여 tripItems에 할당
-					this.hotItems = response.data;
-					
-          this.cards = response.data;
-        
-          this.cards.forEach(item => {
-            if (item.first_image === ""){
-              console.log("이미지 없음");
-              item.first_image = require("../assets/logo1.png");
-            }
-            item.imgAlt = require("../assets/logo1.png");
-            item.currentIcon = "heart";
-          });
+        // 받아온 데이터를 가공하여 tripItems에 할당
+        this.hotItems = response.data;
 
+        this.cards = response.data;
 
-          this.updateVisibleCards();
-				});
-		},
+        this.cards.forEach((item) => {
+          if (item.first_image === "") {
+            console.log("이미지 없음");
+            item.first_image = require("../assets/logo1.png");
+          }
+          item.imgAlt = require("../assets/logo1.png");
+          item.currentIcon = "heart";
+        });
+
+        this.updateVisibleCards();
+      });
+    },
 
     openModal(card, index) {
       console.log(card);
       this.selectedCard = card;
-      
+
       this.modalOpen = true;
-      this.markers = [[card.latitude, card.longitude ]];
+      this.markers = [[card.latitude, card.longitude]];
       console.log(this.markers);
-      
+
       console.log("선택한 카드 인덱스:", index);
-      
     },
 
     closeModal() {
@@ -306,7 +304,6 @@ export default {
         kakaoMapComponent.init();
       }
     },
-
   },
 };
 </script>
