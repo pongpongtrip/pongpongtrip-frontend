@@ -76,9 +76,15 @@
           <KaKaoMap ref="kakaoMap" :marker-items="markers"/>
         </template>
       </b-modal>
+      
     </b-container>
     
+    <div class="spinner-container" v-if="loading">
+      <b-spinner variant="primary" label="Spinning"></b-spinner>
+    </div>
+    
   </div>
+  
 </template>
 
 <script>
@@ -92,8 +98,11 @@ export default {
   },
   data() {
     return {
+      loading: true, 
+
       visibleCount: 9,
       visibleCards: [],
+
       modalOpen: false,
       selectedCard: null,
       // markers: [],
@@ -163,6 +172,7 @@ export default {
 
 
         this.updateVisibleCards();
+        this.loading = false;
       });
 
 },
@@ -377,7 +387,10 @@ export default {
 .go-button {
   z-index: 1;
 }
-
-
-
+.spinner-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 </style>
