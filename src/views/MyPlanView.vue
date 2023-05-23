@@ -30,7 +30,7 @@
                 >
               </div>
             </b-list-group-item>
-            <b-button class="m-2" type="submit" variant="primary" block>일정 등록</b-button>
+            <b-button type="submit" variant="primary" block>일정 등록</b-button>
           </b-form>
         </b-list-group>
       </div>
@@ -85,12 +85,12 @@
       <div class="row w-100 mt-4">
         <!-- kakao map start -->
         <div style="width: 700px; height: 700px">
-          <KaKaoMap :markerItems="this.markers" />
+          <KaKaoMap ref="kakaoMapRef" :markerItems="this.markers" />
         </div>
         <!-- kakao map end -->
         <div class="col">
           <h2>관광지 목록</h2>
-          <plan-items :plan-items="planItems"></plan-items>
+          <plan-items :plan-items="planItems" @display-info-window="displayInfoWindow"></plan-items>
         </div>
       </div>
     </b-container>
@@ -177,14 +177,26 @@ export default {
         this.tripItems = response.data;
         let marks = [];
 
+        // 받아온 데이터를 가공하여 tripItems에 할당
+        this.planItems = response.data;
+
+        this.planItems.forEach((item) => {
+          if (item.first_image === "") {
+            item.first_image = require("../assets/logo2.png");
+          }
+        });
+
         for (let i = 0; i < response.data.length; i++) {
           let a = response.data[i].latitude;
           let b = response.data[i].longitude;
-          this.markers.push([a, b]);
+          let c = response.data[i].title;
+          let d = response.data[i].first_image;
+          let e = response.data[i].addr1;
+          this.markers.push([a, b, c, d, e]);
         }
-
-        // 받아온 데이터를 가공하여 tripItems에 할당
-        this.planItems = response.data;
+        // this.markers = marks;
+        console.log(this.tripItems);
+        console.log(this.markers);
       });
     },
     onReset(event) {
@@ -281,6 +293,10 @@ export default {
     },
     dismissFailModal() {
       this.dismissFailModal = false;
+    },
+    displayInfoWindow(item) {
+      // KaKaoMap 컴포넌트의 displayInfoWindow 함수 호출
+      this.$refs.kakaoMapRef.displayInfoWindow(item);
     },
   },
 };
