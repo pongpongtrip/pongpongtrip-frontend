@@ -38,8 +38,8 @@
 
     <h3 class="title">나의 여행 계획</h3>
     <ul class="travel-plans">
-      <li v-for="plan in travelPlans" :key="plan.id" class="travel-plan">
-        <!-- <h4>{{ plan.destination }}</h4> -->
+      <li v-for="(plan, index) in travelPlans" :key="index" class="travel-plan">
+        <h4 style="text-align: start;padding-left: 20px;">{{ plan.name }}</h4>
         <swiper class="swiper travel-plan-swiper" :options="planSwiperOption">
           <swiper-slide v-for="place in plan.places" :key="place.content_id">
             <b-card
@@ -66,10 +66,10 @@
           <!-- 이전(prev) 및 다음(next) 버튼 -->
           <div class="swiper-button-prev" slot="button-prev"></div>
           <div class="swiper-button-next" slot="button-next"></div>
-
-          <!-- 추가 설정 -->
-          <div class="swiper-pagination" slot="pagination"></div>
         </swiper>
+        <b-button @click="sharePlan(index)" variant="primary" class="go-button share-button" id="btn_primary">
+          공유하기
+        </b-button>
       </li>
     </ul>
     <b-modal v-model="modalOpen" @hidden="closeModal" size="lg" dialog-class="custom-modal">
@@ -89,7 +89,6 @@
 import { Swiper, SwiperSlide } from "vue-awesome-swiper";
 import "swiper/css/swiper.css";
 import http from "@/api/httpDefault.js";
-import Vue from "vue";
 import KaKaoMap from "@/components/KaKaoMap.vue";
 
 export default {
@@ -100,88 +99,11 @@ export default {
       selectedCard: null,
       cards: [],
       travelPlans: [
-        // {
-        //   id: 1,
-        //   destination: '여행 1',
-        //   places: [
-        //     {
-        //       id: 1,
-        //       name: "여행 1의 장소 1",
-        //       description: "이곳은 여행 1의 장소 1입니다."
-        //     },
-        //     {
-        //       id: 2,
-        //       name: "여행 1의 장소 2",
-        //       description: "이곳은 여행 1의 장소 2입니다."
-        //     },
-        //     {
-        //       id: 3,
-        //       name: "여행 1의 장소 3",
-        //       description: "이곳은 여행 1의 장소 3입니다."
-        //     },
-        //   ]
-        // },
-        // {
-        //   id: 2,
-        //   destination: '여행 2',
-        //   places: [
-        //     {
-        //       id: 4,
-        //       name: "여행 2의 장소 1",
-        //       description: "이곳은 여행 2의 장소 1입니다."
-        //     },
-        //     {
-        //       id: 5,
-        //       name: "여행 2의 장소 2",
-        //       description: "이곳은 여행 2의 장소 2입니다."
-        //     },
-        //   ]
-        // },
-        // {
-        //   id: 3,
-        //   destination: '여행 3',
-        //   places: [
-        //     {
-        //       id: 6,
-        //       name: "여행 3의 장소 1",
-        //       description: "이곳은 여행 3의 장소 1입니다."
-        //     },
-        //     {
-        //       id: 7,
-        //       name: "여행 3의 장소 2",
-        //       description: "이곳은 여행 3의 장소 2입니다."
-        //     },
-        //     {
-        //       id: 8,
-        //       name: "여행 3의 장소 3",
-        //       description: "이곳은 여행 3의 장소 3입니다."
-        //     },
-        //     {
-        //       id: 9,
-        //       name: "여행 3의 장소 4",
-        //       description: "이곳은 여행 3의 장소 4입니다."
-        //         },
-        //         {
-        //       id: 9,
-        //       name: "여행 3의 장소 4",
-        //       description: "이곳은 여행 3의 장소 4입니다."
-        //         },
-        //         {
-        //       id: 9,
-        //       name: "여행 3의 장소 4",
-        //       description: "이곳은 여행 3의 장소 4입니다."
-        //         },
-        //         {
-        //       id: 9,
-        //       name: "여행 3의 장소 4",
-        //       description: "이곳은 여행 3의 장소 4입니다."
-        //     },
-        //   ]
-        // },
+
       ],
       swiperOption: {
         slidesPerView: 3,
-        spaceBetween: 30,
+        spaceBetween: 15,
         loop: true,
         autoplay: {
           delay: 5000,
@@ -248,14 +170,15 @@ export default {
         response.data.forEach((item) => {
           console.log(item.planId);
           const planId = item.planId;
+          const planName = item.planName;
           const placeInfo = item;
+
           if (item.first_image === "") {
             console.log("이미지 없음");
             item.first_image = require("../../assets/logo1.png");
           }
           if (currentPlan && currentPlan.id === planId) {
             // 현재 계획과 plan_id가 같은 경우 places에 정보 추가
-
             currentPlan.places.push(placeInfo);
           } else {
             if (currentPlan !== null) {
@@ -264,6 +187,7 @@ export default {
             }
             currentPlan = {
               id: planId,
+              name: planName,
               places: [placeInfo],
             };
           }
@@ -342,6 +266,12 @@ export default {
           });
       }
     },
+
+    sharePlan(index) {
+      console.log(index);
+      console.log(this.travelPlans[index]);
+      this.$router.push({ name: 'boardwrite', params: { plan: this.travelPlans[index] } });
+    },
     openModal(card) {
       console.log(card);
       this.selectedCard = card;
@@ -367,12 +297,13 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .title {
   margin-top: 4%;
 }
 .container {
-  margin: 0 10%;
+  margin: auto;
+  text-align: center;
 }
 
 .full-screen {
@@ -380,11 +311,11 @@ export default {
   margin: 0 auto;
 }
 
-.travel-plan {
+/* .travel-plan {
   margin-bottom: 30px;
   width: 100%;
   margin-right: 20px;
-}
+} */
 
 .travel-plan:last-child {
   margin-right: 0;
@@ -392,7 +323,7 @@ export default {
 
 .swiper {
   width: 100%;
-  height: 500px;
+  height: 470px;
 }
 
 .swiper-slide {
@@ -402,11 +333,29 @@ export default {
   padding: 10px;
 }
 
+/* .travel-plans {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+} */
+
 .travel-plans {
   list-style: none;
   padding: 0;
   display: flex;
   flex-wrap: wrap;
+}
+
+.travel-plan {
+  margin-bottom: 30px;
+  width: 100%;
+  margin-right: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 1px 2px 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .card {
@@ -416,11 +365,56 @@ export default {
 }
 
 .card-body {
+  background-color: #fff;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
 }
+.card-title {
+  font-size: 14pt;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-body .time {
+  margin-top: auto !important;
+}
+
+/* 
+
+.card-title {
+  font-size: 14pt;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-body .time {
+  margin-top: auto !important;
+}
+
+*/
 
 #btn_primary {
   display: inline-block;
   margin-top: 10px;
+}
+.share-button {
+  float: right;
+}
+
+.swiper.full-screen {
+  margin-bottom: 20px;
 }
 </style>

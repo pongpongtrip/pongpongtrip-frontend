@@ -308,7 +308,7 @@ export default {
 };
 </script>
 
-<style>
+<style >
 .card-row {
   display: flex;
   flex-wrap: wrap;
@@ -323,6 +323,28 @@ export default {
   width: 100%;
   height: 200px; /* Adjust the desired height */
   object-fit: cover; /* Maintain aspect ratio and cover the container */
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  /* height: 220px; */
+}
+
+.card-title {
+  font-size: 14pt;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-body .time {
+  margin-top: auto !important;
 }
 
 .card .card-text {
