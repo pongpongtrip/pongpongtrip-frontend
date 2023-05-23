@@ -82,6 +82,7 @@
     <div class="spinner-container" v-if="loading">
       <b-spinner variant="primary" label="Spinning"></b-spinner>
     </div>
+    
   </div>
   
 </template>
