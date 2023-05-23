@@ -3,7 +3,13 @@
     <b-sidebar id="sidebar-1" title="1day Trip Plan" shadow v-model="showSidebar">
       <div class="px-3 py-2">
         <b-list-group>
-          <b-form @submit="onSubmitMyPlan">
+          <b-form @submit="checkPlanZero">
+            <b-form-input
+              v-model="planName"
+              placeholder="계획 제목"
+              class="mb-2"
+              required
+            ></b-form-input>
             <b-list-group-item v-for="(item, index) in myPlanItems" :key="index">
               <!-- 내용 출력 -->
               <b-form-group>
@@ -24,11 +30,9 @@
                 >
               </div>
             </b-list-group-item>
+            <b-button class="m-2" type="submit" variant="primary" block>일정 등록</b-button>
           </b-form>
         </b-list-group>
-        <b-button class="m-2" type="submit" variant="primary" block @click="checkPlanZero"
-          >일정 등록</b-button
-        >
       </div>
     </b-sidebar>
     <b-container>
@@ -154,6 +158,7 @@ export default {
       showModalFail: false,
       ModalFailMessage: null,
       maxIndex: 0,
+      planName: null,
     };
   },
   computed: {
@@ -193,7 +198,8 @@ export default {
       const index = this.$store.state.MY_PLAN.indexOf(item);
       this.$store.commit("removeMyPlan", index);
     },
-    checkPlanZero() {
+    checkPlanZero(event) {
+      event.preventDefault();
       console.log(this.$store.state.MY_PLAN.length);
       if (this.$store.state.MY_PLAN.length != 0) {
         this.checkMaxIndex();
@@ -219,12 +225,15 @@ export default {
       for (let current = 0; current < this.$store.state.MY_PLAN.length; current++) {
         const myPlanData = {
           planId: index,
+          planName: this.planName,
           contentId: this.$store.state.MY_PLAN[current].content_id,
           title: this.$store.state.MY_PLAN[current].title,
           time: this.timeValues[current],
           userId: this.userInfo.userId,
           userName: this.userInfo.userName,
         };
+
+        console.log(myPlanData);
 
         const promise = http
           .post(`/attraction/myplan/write`, JSON.stringify(myPlanData))
@@ -267,6 +276,8 @@ export default {
       }
       //timepicker 값 전부 삭제
       this.timeValues = [];
+      //planName 값 삭제
+      this.planName = null;
     },
     dismissFailModal() {
       this.dismissFailModal = false;
