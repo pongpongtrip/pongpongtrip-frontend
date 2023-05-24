@@ -191,6 +191,8 @@ export default {
           { originalFile: "file2.pdf", saveFolder: "folder2", saveFile: "file2-987654321.pdf" },
         ],
       },
+      comments: [], // Array to store comments
+      comment: "", // Input field for new comment
     };
   },
   created() {
@@ -268,6 +270,21 @@ export default {
         // kakaoMapComponent을 사용하여 초기화 작업 수행
         kakaoMapComponent.init();
       }
+    },
+    submitComment() {
+      // Create a new comment object
+      const newComment = {
+        id: Date.now(), // Generate a unique ID
+        text: this.comment,
+        author: "John", // Replace with the actual author name
+        date: new Date().toLocaleString(), // Get the current date and time
+      };
+
+      // Add the new comment to the comments array
+      this.comments.push(newComment);
+
+      // Clear the comment input field
+      this.comment = "";
     },
   },
 };
