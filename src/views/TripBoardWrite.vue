@@ -139,7 +139,6 @@ export default {
         swiperOption: {
           slidesPerView: 3,
           spaceBetween: 15,
-          loop: true,
           autoplay: {
             delay: 5000,
             disableOnInteraction: false,

@@ -171,7 +171,6 @@ export default {
   methods: {
     onSubmit(event) {
       event.preventDefault();
-      alert(JSON.stringify(this.form));
       http.post(`/attraction/search`, JSON.stringify(this.form)).then((response) => {
         // 받아온 데이터를 가공하여 tripItems에 할당
         this.tripItems = response.data;
