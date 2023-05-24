@@ -26,6 +26,7 @@
 						placeholder="아이디 입력"
 						required
 						@input="idCheck"
+						@keydown="removeSlash"
 					></b-form-input>
 				</b-form-group>
 				<b-alert :show="showAlertId" :variant="alertVariantId">{{ alertMessageId }}</b-alert>
@@ -150,8 +151,23 @@ export default {
 		moveLogin() {
 			this.$router.push(`/login`);
 		},
+		removeSlash(event) {
+			if (event.key === '/') {
+				event.preventDefault();
+				this.alertMessageId = "/ 입력이 불가능 합니다.";
+				this.alertVariantId = 'danger';
+				this.showAlertId = true;
+				this.form.userId = this.form.userId.replace(/\//g, '');
+			}
+		},
 		idCheck() {
-			if (this.form.userId.length < 6 || this.form.userId.length > 16) {
+			var regex = /[!@#$%^&*()/,.?":{}|<>]/;
+			if(regex.test(this.form.userId.test)) {
+				this.alertMessageId = "문자열에 특수 문자가 포함되어 있습니다.";
+				this.alertVariantId = 'danger';
+				this.showAlertId = true;
+			}
+			else if (this.form.userId.length < 6 || this.form.userId.length > 16) {
 				this.alertMessageId = '아이디는 6자 이상 16자 이하 입니다.';
 				this.alertVariantId = 'danger';
 				this.showAlertId = true;
