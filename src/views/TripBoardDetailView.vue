@@ -31,9 +31,9 @@
               <hr class="mb-3" />
 
               <!-- 카드 스와이퍼 -->
-              <h4 style="text-align: left">공유 계획</h4>
+              <h4 style="text-align: left">{{ plan.planName }}</h4>
               <swiper class="swiper travel-plan-swiper" :options="swiperOption">
-                <swiper-slide v-for="place in plan" :key="place.content_id">
+                <swiper-slide v-for="place in plan.planInfo" :key="place.content_id">
                   <b-card
                     :title="place.title"
                     :img-src="place.first_image"
@@ -93,7 +93,6 @@
             </div>
           </div>
         </div>
-
         <div class="comment-section">
           <div class="col">
             <div class="col">
@@ -192,8 +191,6 @@ export default {
           { originalFile: "file2.pdf", saveFolder: "folder2", saveFile: "file2-987654321.pdf" },
         ],
       },
-      comments: [], // Array to store comments
-      comment: "", // Input field for new comment
     };
   },
   created() {
@@ -272,21 +269,6 @@ export default {
         kakaoMapComponent.init();
       }
     },
-    submitComment() {
-      // Create a new comment object
-      const newComment = {
-        id: Date.now(), // Generate a unique ID
-        text: this.comment,
-        author: "John", // Replace with the actual author name
-        date: new Date().toLocaleString(), // Get the current date and time
-      };
-
-      // Add the new comment to the comments array
-      this.comments.push(newComment);
-
-      // Clear the comment input field
-      this.comment = "";
-    },
   },
 };
 </script>
@@ -353,12 +335,6 @@ export default {
 button {
   margin: 2px;
 }
-
-#board_comment {
-  box-sizing: content-box;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
 .comment-section {
   margin-top: 20px;
 }
@@ -398,7 +374,6 @@ button {
 .comment-item {
   border-bottom: 1px solid #ccc;
   padding: 10px 0;
-  text-align: start;
 }
 
 .comment-item .comment-text {
@@ -408,13 +383,12 @@ button {
 }
 
 .comment-item .comment-author {
-  margin-bottom: 4px;
-  font-size: 16px;
+  font-size: 12px;
   color: #888;
 }
 
 .comment-item .comment-date {
-  font-size: 10px;
+  font-size: 12px;
   color: #888;
   margin-top: 5px;
 }
