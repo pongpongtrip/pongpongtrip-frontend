@@ -67,9 +67,13 @@
           <div class="swiper-button-prev" slot="button-prev"></div>
           <div class="swiper-button-next" slot="button-next"></div>
         </swiper>
+        <b-button @click="deletePlan(index)" variant="outline-danger" class="go-button share-button">
+          삭제하기
+        </b-button>
         <b-button @click="sharePlan(index)" variant="primary" class="go-button share-button" id="btn_primary">
           공유하기
         </b-button>
+        
       </li>
     </ul>
     <b-modal v-model="modalOpen" @hidden="closeModal" size="lg" dialog-class="custom-modal">
@@ -270,7 +274,21 @@ export default {
     sharePlan(index) {
       console.log(index);
       console.log(this.travelPlans[index]);
-      this.$router.push({ name: 'boardwrite', params: { plan: this.travelPlans[index] } });
+      this.$router.push({ name: 'boardwrite', params: {  plan: this.travelPlans[index] } });
+    },
+    deletePlan(index) {
+      console.log(index);
+      console.log(this.travelPlans[index].id);
+      http
+        .post('/attraction/myplan/delete', JSON.stringify({
+          userId: this.$store.state.memberStore.userInfo.userId,
+          planId: this.travelPlans[index].id,
+        }))
+        .then((response) => {
+          console.log(response.data);
+          this.$router.go('/mypage');
+      });
+      
     },
     openModal(card) {
       console.log(card);
@@ -353,7 +371,7 @@ export default {
   margin-right: 20px;
   background-color: #fff;
   border-radius: 5px;
-  box-shadow: 1px 2px 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
   padding: 20px;
   box-sizing: border-box;
 }
@@ -406,10 +424,16 @@ export default {
 
 */
 
-#btn_primary {
+.go-button {
   display: inline-block;
   margin-top: 10px;
+  margin: 1px;
 }
+
+/* #btn_primary {
+  display: inline-block;
+  margin-top: 10px;
+} */
 .share-button {
   float: right;
 }

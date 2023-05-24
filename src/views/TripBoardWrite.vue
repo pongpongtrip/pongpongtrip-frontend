@@ -153,9 +153,14 @@ export default {
     created() {
       this.title = this.$route.params.plan.name;
       this.plan = this.$route.params.plan.places;
+      console.log(this.title);
 
       this.form.content = "";
-      this.form.plan = JSON.stringify(this.plan);
+      const plan2 = {
+        planName: this.title,
+        planInfo: this.plan,
+      }
+      this.form.plan = JSON.stringify(plan2);
 
       this.plan.forEach((item) => {
         console.log(item.time + " " +item.title +"\n");
@@ -176,6 +181,7 @@ export default {
         console.log(this.form.subject);
         console.log(this.form.content);
         console.log(this.form.upfile);
+        
         console.log(this.plan);
         http
           .post(`/board/write`, JSON.stringify(this.form))
