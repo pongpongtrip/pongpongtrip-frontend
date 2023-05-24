@@ -29,7 +29,7 @@
                 <hr class="mb-3" />
 
                 <!-- 카드 스와이퍼 -->
-                <h4 style="text-align:left;">공유할 계획</h4>
+                <h4 style="text-align:left;">공유 계획</h4>
                 <swiper class="swiper travel-plan-swiper" :options="swiperOption">
                   <swiper-slide v-for="place in plan" :key="place.content_id">
                     <b-card
