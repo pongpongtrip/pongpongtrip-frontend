@@ -1,41 +1,36 @@
 <template>
 	<div>
-		<b-table @row-clicked="onRowClicked" hover :items="boardItems" :fields="fields" 
-		:current-page="currentPage"
-        :per-page="perPage">
-		<template #cell(articleNo)="data">
-			<!-- <router-link
-			:to="{
-				name: 'boardDetail',
-				// params: { articleno: data.item.articleno },
-			}"
-			>{{ data.value }}
-			</router-link> -->
-			<span>{{ data.value }}</span>
-			<!-- <span style="visibility: hidden;">{{ data.value }}</span> -->
-			<!-- <p>{{ increaseIndex() }}</p> -->
-		</template>
-		
-		<template #cell(subject)="data">
-			<p>{{ data.value }}</p>
-		</template>
-		<template #cell(userId)="data">
-			<p>{{ data.value }}</p>
-		</template>
-		<template #cell(hit)="data">
-			<p>{{ data.value }}</p>
-		</template>
-		<template #cell(registerTime)="data">
-			<p>{{ data.value }}</p>
-		</template>
+		<b-table
+			@row-clicked="onRowClicked"
+			hover
+			:items="boardItemsWithIndex"
+			:fields="fields"
+			:current-page="currentPage"
+			:per-page="perPage"
+		>
+			<template #cell(articleNo)="data">
+				<span>{{ data.value }}</span>
+			</template>
 
-		</b-table>	
+			<template #cell(subject)="data">
+				<p>{{ data.value }}</p>
+			</template>
+			<template #cell(userId)="data">
+				<p>{{ data.value }}</p>
+			</template>
+			<template #cell(hit)="data">
+				<p>{{ data.value }}</p>
+			</template>
+			<template #cell(registerTime)="data">
+				<p>{{ data.value }}</p>
+			</template>
+		</b-table>
 
 		<b-pagination
 			v-model="currentPage"
 			:total-rows="rows"
-		:per-page="perPage"
-		class="justify-content-center"
+			:per-page="perPage"
+			class="justify-content-center"
 		/>
 	</div>
 </template>
@@ -62,33 +57,28 @@ export default {
 				{ key: 'hit', label: '조회수' },
 				{ key: 'registerTime', label: '작성일' },
 			],
-			
 		};
 	},
 	methods: {
-		onRowClicked: function(item, index, event) {
+		onRowClicked: function (item, index, event) {
 			console.log(item.articleNo);
 			this.$store.commit('setArticleNo', item.articleNo);
 			console.log(this.$store.state.articleNo);
-			
+
 			// this.$store.commit('articleNo', item.articleNo);
-			this.$router.push('/tripboard/detail').catch(()=>{});
-				
+			this.$router.push('/tripboard/detail').catch(() => {});
 		},
-		increaseIndex: function() {
-			// if (this.index > this.rows) {
-			// 	return
-			// }
-			this.index = this.index+1;
-			return this.index;
-		}
 	},
 	computed: {
-		rows(){
+		rows() {
 			return this.boardItems.length;
-    }
-	}
-	
+		},
+		boardItemsWithIndex() {
+			return this.boardItems.map((item, index) => {
+				return { ...item, articleNo: index + 1 };
+			});
+		},
+	},
 };
 </script>
 <style scoped>
