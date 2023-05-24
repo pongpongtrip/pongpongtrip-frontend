@@ -100,7 +100,6 @@ export default {
   methods: {
     onSubmit(event) {
       event.preventDefault();
-      alert(JSON.stringify(this.form));
       http.post(`/attraction/search`, JSON.stringify(this.form)).then((response) => {
         console.log(response.data);
 

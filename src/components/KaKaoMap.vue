@@ -119,7 +119,7 @@ export default {
           (bounds, latlng) => bounds.extend(latlng),
           new kakao.maps.LatLngBounds()
         );
-
+        this.map.setLevel(8, {anchor: new kakao.maps.LatLng(this.markerItems[0][0], this.markerItems[0][1])});
         this.map.setBounds(bounds);
 
         //마커 클릭 이벤트
