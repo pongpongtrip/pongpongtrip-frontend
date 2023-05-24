@@ -29,9 +29,9 @@
                 <hr class="mb-3" />
 
                 <!-- 카드 스와이퍼 -->
-                <h4 style="text-align:left;">공유 계획</h4>
+                <h4 style="text-align:left;">{{ plan.planName }}</h4>
                 <swiper class="swiper travel-plan-swiper" :options="swiperOption">
-                  <swiper-slide v-for="place in plan" :key="place.content_id">
+                  <swiper-slide v-for="place in plan.planInfo" :key="place.content_id">
                     <b-card
                       :title="place.title"
                       :img-src="place.first_image"
@@ -81,6 +81,26 @@
               </div>
             </div>
           </div>
+          <div class="comment-section">
+            <ul class="comment-list">
+              <!-- Render comments dynamically here -->
+              <li class="comment-item" v-for="comment in comments" :key="comment.id">
+                <p class="comment-text">{{ comment.text }}</p>
+                <p class="comment-author">작성자: {{ comment.author }}</p>
+                <p class="comment-date">작성일: {{ comment.date }}</p>
+              </li>
+            </ul>
+            <div class="comment-header">
+              <h4>댓글 쓰기</h4>
+            </div>
+            <div class="comment-input">
+              <b-form-textarea v-model="comment" rows="3" placeholder="댓글을 입력하세요"></b-form-textarea>
+            </div>
+            <div class="comment-button">
+              <b-button @click="submitComment" variant="primary">댓글 등록</b-button>
+            </div>
+            
+          </div>
         </div>
       </main>
 
@@ -117,6 +137,9 @@
     },
     data() {
       return {
+
+        comments: [], // Array to store comments
+        comment: '',  // Input field for new comment
         plan: [],
         modalOpen: false,
         selectedCard: null,
@@ -224,6 +247,22 @@
           kakaoMapComponent.init();
         }
       },
+
+      submitComment() {
+        // Create a new comment object
+        const newComment = {
+          id: Date.now(), // Generate a unique ID
+          text: this.comment,
+          author: 'John', // Replace with the actual author name
+          date: new Date().toLocaleString() // Get the current date and time
+        };
+
+        // Add the new comment to the comments array
+        this.comments.push(newComment);
+
+        // Clear the comment input field
+        this.comment = '';
+      },
     },
   };
   </script>
@@ -289,5 +328,62 @@
 }
 button {
     margin: 2px;
+}
+.comment-section {
+  margin-top: 20px;
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.comment-header h4 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.comment-input {
+  margin-bottom: 10px;
+}
+
+.comment-button {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.comment-button .btn {
+  margin-left: 10px;
+}
+
+.comment-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.comment-item {
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+}
+
+.comment-item .comment-text {
+  margin: 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.comment-item .comment-author {
+  font-size: 12px;
+  color: #888;
+}
+
+.comment-item .comment-date {
+  font-size: 12px;
+  color: #888;
+  margin-top: 5px;
 }
   </style>
