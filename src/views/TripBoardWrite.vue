@@ -142,7 +142,8 @@ export default {
 		};
 	},
 	created() {
-		if (this.$route.params.length > 0) {
+		if (Object.keys(this.$route.params).length > 0) {
+			console.log('여기!');
 			this.title = this.$route.params.plan.name;
 			this.plan = this.$route.params.plan.places;
 		}
