@@ -73,8 +73,8 @@
 			</b-modal>
 			<b-row class="d-flex justify-content-between">
 				<b-button @click="handleRegist()" variant="outline-primary">회원등록</b-button>
-				<!--form  start-->
-				<!-- <b-form inline class="justify-content-md-center">
+				<!--search form  start-->
+				<b-form inline class="justify-content-md-center" @submit.prevent="searchMembers">
 					<b-form-group id="search-key" class="mb-2 mr-sm-2 mb-sm-0">
 						<b-form-select
 							id="search-key"
@@ -93,12 +93,18 @@
 						></b-form-input>
 					</b-form-group>
 					<b-button type="submit" variant="primary">검색</b-button>
-				</b-form> -->
-				<!--form  end-->
+				</b-form>
+				<!--search form  end-->
 			</b-row>
 			<!-- 회원 목록 list start -->
 			<div class="mt-4">
-				<b-table hover :items="member_list" :fields="fields">
+				<b-table
+					hover
+					:items="member_list"
+					:fields="fields"
+					:per-page="perPage"
+					:current-page="currentPage"
+				>
 					<template #cell(updateDelete)="row">
 						<b-button-group>
 							<b-button variant="outline-primary" size="sm" @click="handleUpdate(row.item)"
@@ -108,8 +114,19 @@
 								>삭제</b-button
 							>
 						</b-button-group>
-					</template></b-table
+					</template>
+				</b-table>
+				<b-pagination
+					v-model="currentPage"
+					:total-rows="member_list.length"
+					:per-page="perPage"
+					align="center"
 				>
+					<template #first-text><b-icon icon="chevron-double-left"></b-icon></template>
+					<template #prev-text><b-icon icon="chevron-compact-left"></b-icon></template>
+					<template #next-text><b-icon icon="chevron-compact-right"></b-icon></template>
+					<template #last-text><b-icon icon="chevron-double-right"></b-icon></template>
+				</b-pagination>
 			</div>
 			<!-- 회원 목록 list end -->
 		</b-container>
@@ -187,7 +204,15 @@
 	</div>
 </template>
 <script>
-import { userlist, deleteMember, update, isPossibleId, regist } from '@/api/member';
+import {
+	userlist,
+	deleteMember,
+	update,
+	isPossibleId,
+	regist,
+	userlistById,
+	userlistByName,
+} from '@/api/member';
 
 export default {
 	name: 'MemberList',
@@ -242,6 +267,8 @@ export default {
 			showModalRegist: false,
 			showModalRegistCheck: false,
 			ModalRegistMessage: '',
+			currentPage: 1,
+			perPage: 10,
 		};
 	},
 	created() {
@@ -290,6 +317,8 @@ export default {
 				this.member_list = data;
 				console.log(this.member_list);
 			});
+			this.showAlertId = false;
+			this.showAlertPwd = false;
 		},
 		handleUpdateSubmit() {
 			console.log('Update form submitted:', this.updateForm);
@@ -357,6 +386,21 @@ export default {
 			this.form.userPassword = '';
 			this.form.checkPassword = '';
 			this.form.email = '';
+		},
+		searchMembers() {
+			if (this.form_search.search_key === 'userid') {
+				userlistById(this.form_search.search_keyword, ({ data }) => {
+					this.member_list = data;
+					console.log(this.member_list);
+				});
+			}
+
+			if (this.form_search.search_key === 'username') {
+				userlistByName(this.form_search.search_keyword, ({ data }) => {
+					this.member_list = data;
+					console.log(this.member_list);
+				});
+			}
 		},
 	},
 };

@@ -44,6 +44,14 @@ async function userlist(success, fail) {
 	await api.get(`admin/user/list`).then(success).catch(fail);
 }
 
+async function userlistById(key, success, fail) {
+	await api.get(`admin/user/list/userid/${key}`).then(success).catch(fail);
+}
+
+async function userlistByName(key, success, fail) {
+	await api.get(`admin/user/list/username/${key}`).then(success).catch(fail);
+}
+
 export {
 	login,
 	findById,
@@ -55,4 +63,6 @@ export {
 	update,
 	deleteMember,
 	userlist,
+	userlistById,
+	userlistByName,
 };
