@@ -85,7 +85,7 @@
                 <div style="height: 300px">
                   <KaKaoMap ref="kakaoMap" :marker-items="markers" />
                 </div>
-                <div class="ml-4 mt-4" id="modal_cardContent">
+                <div class="mx-4 mt-4" id="modal_cardContent">
                   <div class="col-md-1"></div>
                   <div id="hotplace_card_title">{{ selectedCard.title }}</div>
                   <div class="mt-2">주소 : {{ selectedCard.addr1 }}</div>

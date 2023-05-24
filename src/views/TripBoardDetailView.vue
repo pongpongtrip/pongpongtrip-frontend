@@ -4,12 +4,10 @@
     <main id="main" class="pt-5">
       <div class="container">
         <div class="col justify-content-center">
-          <div class="col pt-3 text-center text-decoration-underline">
-            <h4>상세보기</h4>
-          </div>
+          <div class="col"></div>
           <div class="col">
-            <div class="row my-2">
-              <h2 class="text-secondary px-5">{{ article.articleNo }}. {{ article.subject }}</h2>
+            <div class="row my-2 mx-4">
+              <h2 class="text-secondary">{{ article.subject }}</h2>
             </div>
             <div class="col">
               <div class="col-md-8">
@@ -19,8 +17,7 @@
                     :src="avatarSrc"
                     alt="Avatar"
                   ></b-avatar>
-
-                  <p class="userId fw-bold">{{ article.userId }}</p>
+                  <p class="userId fw-bold" id="article_userName">{{ article.userName }}</p>
                   <br />
                 </div>
               </div>
@@ -31,7 +28,7 @@
               <hr class="mb-3" />
 
               <!-- 카드 스와이퍼 -->
-              <h4 style="text-align: left">{{ plan.planName }}</h4>
+              <h4 style="text-align: left" v-if="plan.planName !== null">{{ plan.planName }}</h4>
               <swiper class="swiper travel-plan-swiper" :options="swiperOption">
                 <swiper-slide v-for="place in plan.planInfo" :key="place.content_id">
                   <b-card
@@ -96,16 +93,32 @@
         <div class="comment-section">
           <div class="col">
             <div class="col">
-              <ul class="comment-list">
+              <b-list-group id="comment-list" flush>
                 <!-- Render comments dynamically here -->
-                <li class="comment-item" v-for="comment in comments" :key="comment.id">
+                <b-list-group-item
+                  class="comment-item"
+                  v-for="comment in displayedItems"
+                  :key="comment.id"
+                >
                   <p class="comment-author">
-                    <b-icon icon="person-circle"></b-icon> {{ comment.author }}
+                    <b-icon icon="person-circle"></b-icon> {{ comment.userName }}
                   </p>
-                  <p class="comment-text">{{ comment.text }}</p>
-                  <p class="comment-date">{{ comment.date }}</p>
-                </li>
-              </ul>
+                  <p class="comment-text">{{ comment.content }}</p>
+                  <p class="comment-date">{{ comment.registerTime }}</p>
+                </b-list-group-item>
+              </b-list-group>
+              <b-pagination
+                v-model="currentPage"
+                :total-rows="comments.length"
+                :per-page="perPage"
+                aria-controls="comment-list"
+                align="center"
+              >
+                <template #first-text><b-icon icon="chevron-double-left"></b-icon></template>
+                <template #prev-text><b-icon icon="chevron-compact-left"></b-icon></template>
+                <template #next-text><b-icon icon="chevron-compact-right"></b-icon></template>
+                <template #last-text><b-icon icon="chevron-double-right"></b-icon></template>
+              </b-pagination>
               <div class="my-4">
                 <div class="comment-header">
                   <h4>댓글 쓰기</h4>
@@ -183,6 +196,7 @@ export default {
         articleNo: 1,
         subject: "Sample Subject",
         userId: "john123",
+        userName: "",
         registerTime: "2023-05-18",
         hit: 10,
         content: "Sample content",
@@ -193,6 +207,8 @@ export default {
       },
       comments: [], // Array to store comments
       comment: "", // Input field for new comment
+      currentPage: 1,
+      perPage: 7,
     };
   },
   created() {
@@ -208,13 +224,19 @@ export default {
         this.article.articleNo = response.data.articleNo;
         this.article.subject = response.data.subject;
         this.article.userId = response.data.userId;
+        this.article.userName = response.data.userName;
         this.article.registerTime = response.data.registerTime;
         this.article.hit = response.data.hit;
         this.article.content = response.data.content;
         this.article.fileInfos = response.data.fileInfos;
-        this.plan = JSON.parse(response.data.plan);
+        if (JSON.parse(response.data.plan) !== null) {
+          this.plan = JSON.parse(response.data.plan);
+        }
 
         console.log(this.plan);
+      })
+      .then(() => {
+        this.fetchCommentList();
       });
   },
   computed: {
@@ -224,6 +246,11 @@ export default {
     },
     isCurrentUserArticleOwner() {
       return this.userInfo.userId === this.article.userId;
+    },
+    displayedItems() {
+      const startIndex = (this.currentPage - 1) * this.perPage;
+      const endIndex = startIndex + this.perPage;
+      return [...this.comments].slice(startIndex, endIndex);
     },
   },
   methods: {
@@ -274,17 +301,29 @@ export default {
     submitComment() {
       // Create a new comment object
       const newComment = {
-        id: Date.now(), // Generate a unique ID
-        text: this.comment,
-        author: "John", // Replace with the actual author name
-        date: new Date().toLocaleString(), // Get the current date and time
+        // user_id
+        // content
+        // register_time
+
+        articleNo: this.article.articleNo,
+        userName: this.userInfo.userName,
+        content: this.comment,
       };
-
-      // Add the new comment to the comments array
-      this.comments.push(newComment);
-
+      //back으로 푸시
+      console.log(newComment);
+      http.post(`/board/comment/write`, newComment).then(({ data }) => {
+        console.log(data);
+        this.comment = "";
+        this.fetchCommentList();
+      });
       // Clear the comment input field
-      this.comment = "";
+    },
+    fetchCommentList() {
+      const articleNo = this.article.articleNo;
+      http.get(`/board/comment/list/${articleNo}`).then(({ data }) => {
+        console.log(data);
+        this.comments = data;
+      });
     },
   },
 };
@@ -391,6 +430,7 @@ button {
 .comment-item {
   border-bottom: 1px solid #ccc;
   padding: 10px 0;
+  text-align: start;
 }
 
 .comment-item .comment-text {
@@ -400,13 +440,22 @@ button {
 }
 
 .comment-item .comment-author {
-  font-size: 12px;
-  color: #888;
+  font-size: 14px;
+  /* color: #888; */
+  margin-bottom: 2px;
+  color: #333;
+  font-weight: bold;
 }
 
 .comment-item .comment-date {
-  font-size: 12px;
+  font-size: 10px;
   color: #888;
   margin-top: 5px;
+}
+
+#article_userName {
+  margin-left: 10px;
+  margin-bottom: 0px;
+  place-self: center;
 }
 </style>
