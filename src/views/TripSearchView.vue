@@ -35,7 +35,9 @@
       <!--form  end-->
 
       <!-- kakao map start -->
-      <KaKaoMap :markerItems="this.markers" />
+      <div style="height: 700px; justify-content: center" class="mt-3">
+        <KaKaoMap :markerItems="this.markers" />
+      </div>
       <!-- kakao map end -->
 
       <h2 class="mt-4">관광지 목록</h2>

@@ -1,10 +1,9 @@
 <template>
-  <div id="kakao">
-    <div class="row">
-      <div class="col-md-1"></div>
+  <div id="kakao" style="height: 100%">
+    <div class="row" id="kakao_map">
       <div class="col-md-10">
         <!-- kakao map start -->
-        <div id="map" class="mt-3" style="width: 100%; height: 700px"></div>
+        <div id="map" style="width: 100%; height: 100%"></div>
 
         <!-- kakao map end -->
         <!-- <button @click="displayMarker(markerPositions1)">marker set 1</button> -->
@@ -204,5 +203,10 @@ export default {
 .displayInfo_body {
   font-size: 11px;
   display: flex;
+}
+
+#kakao_map {
+  justify-content: center;
+  height: 100%;
 }
 </style>

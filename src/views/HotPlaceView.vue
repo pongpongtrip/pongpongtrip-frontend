@@ -65,21 +65,44 @@
         dialog-class="hotplace_custom-modal"
       >
         <template #modal-title>
-          <h5 class="hotplace_modal-title">{{ selectedCard.title }}</h5></template
+          <h5 class="hotplace_modal-title mb-0" id="hotplace_modal_title">
+            {{ selectedCard.title }}
+          </h5></template
         >
         <template #default>
           <div class="hotplace_card">
-            <img
-              :src="selectedCard.first_image"
-              :alt="selectedCard.imgAlt"
-              style="max-width: 100%"
-              class="hotplace_card-img-top"
-            />
-            <p class="hotplace_card-text">주소: {{ selectedCard.addr1 }}</p>
-            <p class="hotplace_card-text">전화번호: {{ selectedCard.telname }}</p>
-            <p class="hotplace_card-text">{{ selectedCard.overview }}</p>
+            <b-row>
+              <b-col sm="7">
+                <b-img
+                  thumbnail
+                  fluid
+                  :src="selectedCard.first_image"
+                  :alt="selectedCard.imgAlt"
+                  id="hotplace_img"
+                ></b-img>
+              </b-col>
+              <b-col sm="5" id="hotplace_card_right">
+                <div style="height: 300px">
+                  <KaKaoMap ref="kakaoMap" :marker-items="markers" />
+                </div>
+                <div class="ml-4 mt-4" id="modal_cardContent">
+                  <div class="col-md-1"></div>
+                  <div id="hotplace_card_title">{{ selectedCard.title }}</div>
+                  <div class="mt-2">주소 : {{ selectedCard.addr1 }}</div>
+                </div>
+              </b-col>
+            </b-row>
+            <div class="mt-4">
+              <div id="hotplace_card_content">정보</div>
+              <b-form-textarea
+                v-model="selectedCard.overview"
+                debounce="500"
+                rows="3"
+                max-rows="8"
+                class="mt-2"
+              ></b-form-textarea>
+            </div>
           </div>
-          <KaKaoMap ref="kakaoMap" :marker-items="markers" />
         </template>
       </b-modal>
     </b-container>
@@ -308,7 +331,7 @@ export default {
 };
 </script>
 
-<style >
+<style>
 .card-row {
   display: flex;
   flex-wrap: wrap;
@@ -411,5 +434,38 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+#modal_cardContent {
+  padding-left: 15px;
+}
+
+@font-face {
+  font-family: "NanumSquareNeo-Variable";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2")
+    format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.hotplace_card,
+.hotplace_modal-title {
+  font-family: "NanumSquareNeo-Variable";
+  /* font-family: Avenir, Helvetica, Arial, sans-serif; */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2c3e50;
+}
+#hotplace_card_title,
+#hotplace_modal_title,
+#hotplace_card_content {
+  font-weight: bold;
+}
+
+#hotplace_img {
+  padding: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+#hotplace_card_right {
+  padding: 10px;
 }
 </style>
