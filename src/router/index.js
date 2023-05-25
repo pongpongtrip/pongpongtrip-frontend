@@ -17,7 +17,6 @@ import TripModify from '@/views/TripBoardModifyView.vue';
 
 import store from "@/store";
 
-// https://v3.router.vuejs.org/kr/guide/advanced/navigation-guards.html
 const onlyAuthUser = async (to, from, next) => {
   const checkUserInfo = store.getters["memberStore/checkUserInfo"];
   const checkToken = store.getters["memberStore/checkToken"];
@@ -32,7 +31,10 @@ const onlyAuthUser = async (to, from, next) => {
   if (!checkToken || checkUserInfo === null) {
     alert("로그인이 필요한 페이지입니다..");
     // next({ name: "login" });
-    router.push({ name: "login" });
+	if (router.history.current.name !== 'login') {
+		router.push({ name: "login" });
+	}
+	console.log(router)  
   } else {
     console.log("로그인 했다!!!!!!!!!!!!!.");
     next();
@@ -56,6 +58,7 @@ const routes = [
 	{
 		path: '/myplan',
 		name: 'myplan',
+		beforeEnter: onlyAuthUser,
 		component: MyPlanView,
 	},
 	{
@@ -66,23 +69,27 @@ const routes = [
 	{
 		path: '/tripboard',
 		name: 'tripboard',
+		beforeEnter: onlyAuthUser,
 		component: TripBoardView,
 		
 	},
 	{
 		path: '/tripboard/write',
 		name: 'boardwrite',
+		beforeEnter: onlyAuthUser,
 		component: TripBoardWrite,
 		props: true,
 	},
 	{
 		path: '/tripboard/detail',
 		name: 'boardDetail',
+		beforeEnter: onlyAuthUser,
 		component: TripBoardDetail,
 	},
 	{
 		path: '/tripboard/modify',
 		name: 'boardModify',
+		beforeEnter: onlyAuthUser,
 		component: TripModify,
 	},
 	{
@@ -99,11 +106,13 @@ const routes = [
 	{
 		path: '/memberupdate',
 		name: 'memberupdate',
+		beforeEnter: onlyAuthUser,
 		component: MemberUpdateView,
 	},
 	{
 		path: '/memberlist',
 		name: 'memberlist',
+		beforeEnter: onlyAuthUser,
 		component: MemberList,
 	},
 	{
@@ -114,6 +123,7 @@ const routes = [
 	{
 		path: '/mypage',
 		name: 'mypage',
+		beforeEnter: onlyAuthUser,
 		component: MypageView,
 	},
 ];
