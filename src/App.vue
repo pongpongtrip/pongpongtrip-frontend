@@ -11,6 +11,11 @@ export default {
   components: {
     TheHeaderNaviBar,
   },
+  watch: {
+    '$route'(to, from) {
+      console.log(to, from);
+    }
+  },
   data() {
     return {
       message: "",

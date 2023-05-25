@@ -154,7 +154,7 @@ export default {
 				spaceBetween: 15,
 				loop: true,
 				autoplay: {
-					delay: 5000,
+					delay: 1500,
 					disableOnInteraction: false,
 				},
 				navigation: {

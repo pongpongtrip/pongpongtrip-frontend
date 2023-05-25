@@ -284,7 +284,7 @@ export default {
 
     onSubmit(event) {
       event.preventDefault();
-      alert(JSON.stringify(this.form));
+      // alert(JSON.stringify(this.form));
       http.post(`/attraction/hotplace/search`, JSON.stringify(this.form)).then((response) => {
         console.log(response.data);
 

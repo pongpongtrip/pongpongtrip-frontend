@@ -45,6 +45,10 @@ const onlyAuthUser = async (to, from, next) => {
 Vue.use(VueRouter);
 
 const routes = [
+	// {
+	// 	path: '/index.html',
+	// 	redirect: "/"
+	// },
 	{
 		path: '/',
 		name: 'home',
@@ -129,7 +133,7 @@ const routes = [
 ];
 
 const router = new VueRouter({
-	mode: 'history',
+	// mode: 'history',
 	base: process.env.BASE_URL,
 	routes,
 });
