@@ -1,6 +1,11 @@
 <template>
   <div>
-    <b-carousel
+    <div class="bg-video">
+      <video  ref="videoRef" class="bg-video__content" autoplay muted loop>
+        <source :src="videoSource" type="video/mp4">
+      </video>
+    </div>
+    <!-- <b-carousel
       id="carousel-1"
       v-model="slide"
       :interval="4000"
@@ -14,7 +19,6 @@
       @sliding-end="onSlideEnd"
     >
       <b-carousel-slide>
-        <!-- img : 3480x1200 -->
         <template #img>
           <img class="d-block img-fluid w-100" src="@/assets/main_pic1.jpg" alt="image slot" />
         </template>
@@ -29,15 +33,16 @@
           <img class="d-block img-fluid w-100" src="@/assets/main_pic3.jpg" alt="image slot" />
         </template>
       </b-carousel-slide>
-    </b-carousel>
+    </b-carousel> -->
     <div class="pongpong">
       <h1 id="main_title">YOUR TRIP OF JOY</h1>
       <h5 id="main_content">퐁퐁트립과 함께 세상의 모든 즐거움을 찾아보세요</h5>
-      <b-button id="main_button" variant="primary" to="/hotplace">둘러보기</b-button>
+      <button class="button button--winona button--border-thick button--round-l button--text-upper button--size-s button--text-thick" data-text="둘러보기"><span>둘러보기</span></button>
+      <!-- <b-button id="main_button" variant="primary" to="/hotplace">둘러보기</b-button> -->
     </div>
 
     <!-- 전국 베스트 숙소 start -->
-    <div class="container">
+    <!-- <div class="container">
       <div class="row mt-4 mb-4">
         <div class="mt-4">
           <h3 class="text-start">전국 베스트 숙소 <b-icon icon="house-fill"></b-icon></h3>
@@ -65,14 +70,7 @@
                   <b-icon icon="chevron-compact-left"></b-icon>
                 </a>
               </li>
-              <!-- <li
-              class="page-item"
-              v-for="page in totalPages"
-              :key="page"
-              :class="{ active: currentPage === page }"
-            >
-              <a class="page-link" href="#" @click="goToPage(page)">{{ page }}</a>
-            </li> -->
+             
               <li class="page-item" :class="{ disabled: currentPage_hotel === totalPages_hotel }">
                 <a
                   class="page-link"
@@ -117,14 +115,7 @@
                   <b-icon icon="chevron-compact-left"></b-icon>
                 </a>
               </li>
-              <!-- <li
-              class="page-item"
-              v-for="page in totalPages"
-              :key="page"
-              :class="{ active: currentPage === page }"
-            >
-              <a class="page-link" href="#" @click="goToPage(page)">{{ page }}</a>
-            </li> -->
+              
               <li
                 class="page-item"
                 :class="{ disabled: currentPage_attraction === totalPages_attraction }"
@@ -141,7 +132,7 @@
           </nav>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
@@ -149,6 +140,9 @@ export default {
   name: "HomeView",
   data() {
     return {
+      videoUrls: ["/city.mp4", "/clouds.mp4", "/island.mp4", "/ocean.mp4"],
+      
+      videoSource: null,
       slide: 0,
       sliding: null,
       isHovered: false,
@@ -241,6 +235,8 @@ export default {
   },
   async created() {
     console.log("Created in??");
+    // var jbRandom = Math.random();
+    // this.videoSource= this.videoSources[Math.random(Math.floor( Math.random() * 4 ))];
     const serviceKey =
       "T%2FAhyTaE0rj803LnvkkF61K45eKKUhlcmpHuGSwflWQGhTM%2BF9fvx%2By%2BlRXOf2b8VQQOPjConQOOrw%2F47eNkxg%3D%3D";
     // index page 로딩 후 전국의 시도 설정.
@@ -303,6 +299,13 @@ export default {
           this.makeList2(item);
         }
       );
+  },
+  mounted() {
+    const randomIndex = Math.floor(Math.random() * this.videoUrls.length);
+    this.videoSource = this.videoUrls[randomIndex];
+
+    // 비디오 재생
+    this.$refs.videoRef.play();
   },
   computed: {
     paginatedCards_hotel() {
@@ -405,6 +408,22 @@ export default {
 /* .d-block {
   opacity: 50%;
 } */
+.bg-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+  opacity: 0.9;
+}
+
+.bg-video__content {
+  height: 100%;
+  width: 100%;
+  object-fit: cover; 
+  
+}
 
 .slide-text {
   color: white;
@@ -445,10 +464,15 @@ export default {
 
 .pongpong {
   z-index: 100;
-  position: relative;
-  bottom: 15em;
+  /* position: absolute;
+  bottom: 30em;
+  
   margin: 0 20%;
-  text-align: start;
+  text-align: start; */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 #main_title {
@@ -462,4 +486,147 @@ export default {
 
 #main_button {
 }
+
+.button {
+  float: left;
+  min-width: 150px;
+  max-width: 250px;
+  display: block;
+  margin: 1em;
+  padding: 1em 2em;
+  border: none;
+  background: none;
+  color: inherit;
+  vertical-align: middle;
+  position: relative;
+  z-index: 1;
+  -webkit-backface-visibility: hidden;
+  -moz-osx-font-smoothing: grayscale;
+}
+.button:focus {
+  outline: none;
+}
+.button > span {
+  vertical-align: middle;
+}
+
+/* Text color adjustments (we could stick to the "inherit" but that does not work well in Safari) */
+.button {
+  color: #fff;
+  border-color: #fff;
+}
+.bg-2 .button {
+  color: #ECEFF1;
+  border-color: #ECEFF1;
+}
+.bg-3 .button {
+  color: #fff;
+  border-color: #fff;
+}
+
+/* Sizes */
+.button--size-s {
+  font-size: 14px;
+}
+.button--size-m {
+  font-size: 16px;
+}
+.button--size-l {
+  font-size: 18px;
+}
+
+/* Typography and Roundedness */
+.button--text-upper {
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.button--text-thin {
+  font-weight: 300;
+}
+.button--text-medium {
+  font-weight: 500;
+}
+.button--text-thick {
+  font-weight: 600;
+}
+.button--round-s {
+  border-radius: 5px;
+}
+.button--round-m {
+  border-radius: 15px;
+}
+.button--round-l {
+  border-radius: 40px;
+}
+
+/* Borders */
+.button--border-thin {
+  border: 1px solid;
+}
+.button--border-medium {
+  border: 2px solid;
+}
+.button--border-thick {
+  border: 3px solid;
+}
+
+
+
+.button--winona {
+  overflow: hidden;
+  padding: 0;
+  -webkit-transition: border-color 0.3s, background-color 0.3s;
+  transition: border-color 0.3s, background-color 0.3s;
+  -webkit-transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
+  transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
+}
+.button--winona::after {
+  content: attr(data-text);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  color: #3f51b5;
+  -webkit-transform: translate3d(0, 25%, 0);
+  transform: translate3d(0, 25%, 0);
+}
+.button--winona > span {
+  display: block;
+}
+.button--winona.button--inverted {
+  color: #7986cb;
+}
+.button--winona.button--inverted:after {
+  color: #fff;
+}
+.button--winona::after,
+.button--winona > span {
+  padding: 1em 2em;
+  -webkit-transition: -webkit-transform 0.3s, opacity 0.3s;
+  transition: transform 0.3s, opacity 0.3s;
+  -webkit-transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
+  transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
+}
+.button--winona:hover {
+  border-color: #3f51b5;
+  background-color: rgba(63, 81, 181, 0.1);
+}
+.button--winona.button--inverted:hover {
+  border-color: #21333C;
+  background-color: #21333C;
+}
+.button--winona:hover::after {
+  opacity: 1;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+.button--winona:hover > span {
+  opacity: 0;
+  -webkit-transform: translate3d(0, -25%, 0);
+  transform: translate3d(0, -25%, 0);
+}
+
+
 </style>
