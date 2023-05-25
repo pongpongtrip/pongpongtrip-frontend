@@ -17,7 +17,6 @@ import TripModify from '@/views/TripBoardModifyView.vue';
 
 import store from "@/store";
 
-// https://v3.router.vuejs.org/kr/guide/advanced/navigation-guards.html
 const onlyAuthUser = async (to, from, next) => {
   const checkUserInfo = store.getters["memberStore/checkUserInfo"];
   const checkToken = store.getters["memberStore/checkToken"];
